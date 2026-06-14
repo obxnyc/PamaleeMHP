@@ -1,0 +1,2558 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Larabee Homes — Investor Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=DM+Sans:wght@300;400;500;600;700&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --pine:#1f3628;--pine2:#2d4f3c;--sage:#4a7c5c;--mint:#a8c5b0;
+  --bone:#f5f1e8;--cream:#faf8f3;--terra:#c4622d;--terra2:#e07848;
+  --gold:#c9a84c;--ink:#1a1a16;--mid:#5a5a50;--light:#9a9a8e;
+  --rule:rgba(30,50,35,0.12);--card:#fff;--red:#b83232;--green:#2d6b45;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bone);color:var(--ink);font-family:'DM Sans',sans-serif;min-height:100vh}
+
+/* HEADER */
+.hdr{background:var(--pine);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;border-bottom:2px solid var(--terra)}
+.logo{font-family:'DM Serif Display',serif;font-size:19px;color:#fff}.logo span{color:var(--terra2)}
+.nav{display:flex;gap:3px}
+.ntab{background:none;border:none;color:var(--mint);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;border-radius:4px;cursor:pointer;transition:all .15s}
+.ntab:hover{background:rgba(255,255,255,.08);color:#fff}.ntab.active{background:var(--terra);color:#fff}
+
+/* VIEWS */
+.view{display:none;padding:28px;max-width:1240px;margin:0 auto}.view.active{display:block}
+.vhead{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--rule)}
+.veyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--terra);font-weight:600;margin-bottom:5px}
+.vtitle{font-family:'DM Serif Display',serif;font-size:30px;color:var(--pine);line-height:1.1}
+.vsub{font-size:13px;color:var(--mid);margin-top:5px}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:22px}
+.ctitle{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--rule)}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.gap{margin-bottom:20px}
+
+/* METRICS ROW */
+.mrow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.mtile{background:var(--pine);color:#fff;border-radius:8px;padding:16px 18px}
+.mtile.good{background:var(--green)}.mtile.warn{background:#7a5a20}.mtile.bad{background:var(--red)}
+.mval{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;line-height:1;margin-bottom:3px}
+.mlbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.msub{font-size:10px;opacity:.55;margin-top:2px}
+
+/* INPUTS */
+.ig{margin-bottom:14px}
+.ilr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:6px}
+.il{font-size:12px;font-weight:500;color:var(--ink);flex:1}
+.nf{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--pine);background:var(--bone);border:1px solid rgba(30,50,35,.25);border-radius:4px;padding:3px 7px;width:105px;text-align:right;outline:none;transition:border-color .15s}
+.nf:focus{border-color:var(--pine);background:#fff}.nf:hover{border-color:var(--sage)}
+.pt{display:flex;align-items:center}
+.pb{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border:1px solid rgba(30,50,35,.25);background:var(--bone);color:var(--mid);cursor:pointer;transition:all .12s;white-space:nowrap}
+.pb:first-child{border-radius:4px 0 0 4px;border-right:none}.pb:last-child{border-radius:0 4px 4px 0}
+.pb.on{background:var(--pine);color:#fff;border-color:var(--pine)}
+input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:var(--mint);border-radius:2px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--pine);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3);cursor:pointer}
+.hint{font-size:10px;color:var(--light);margin-top:2px}
+
+/* MODE BAR */
+.modebar{display:flex;gap:0;margin-bottom:16px;border:2px solid var(--pine);border-radius:7px;overflow:hidden}
+.mbtn{flex:1;background:none;border:none;padding:9px 6px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mid);cursor:pointer;transition:all .15s;border-right:1px solid var(--pine);text-align:center}
+.mbtn:last-child{border-right:none}.mbtn.on{background:var(--pine);color:#fff}.mbtn:hover:not(.on){background:var(--bone)}
+.msec{display:none}.msec.show{display:block}
+.ocnote{background:rgba(201,168,76,.12);border:1px solid var(--gold);border-radius:5px;padding:10px 12px;font-size:11px;color:#6a4e10;line-height:1.5;margin-bottom:12px}
+
+/* CHATTEL BAR */
+.cbar{display:flex;gap:0;border:1px solid var(--rule);border-radius:5px;overflow:hidden;margin-bottom:8px}
+.cbtn{flex:1;background:none;border:none;padding:5px 3px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mid);cursor:pointer;transition:all .12s;border-right:1px solid var(--rule)}
+.cbtn:last-child{border-right:none}.cbtn.on{background:var(--pine2);color:#fff}
+.csec{display:none}.csec.show{display:block}
+
+/* TABLES */
+.dt{width:100%;border-collapse:collapse;font-size:12px}
+.dt th{text-align:left;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);padding:7px 10px;border-bottom:2px solid var(--rule)}
+.dt td{padding:9px 10px;border-bottom:1px solid var(--rule)}
+.dt tr:last-child td{border-bottom:none}.dt tr:hover td{background:var(--bone)}
+.dt .n{font-family:'DM Mono',monospace;text-align:right}
+.dt .tot td{font-weight:700;background:var(--bone)}
+.pos{color:var(--green)}.neg{color:var(--red)}
+
+/* VERDICT */
+.verdict{border-radius:7px;padding:18px 20px;margin-top:18px;border:2px solid}
+.verdict.pass{border-color:var(--green);background:rgba(45,107,69,.06)}
+.verdict.fail{border-color:var(--red);background:rgba(184,50,50,.06)}
+.verdict.warn{border-color:var(--gold);background:rgba(201,168,76,.08)}
+.vt{font-weight:700;font-size:15px;margin-bottom:7px}
+.verdict.pass .vt{color:var(--green)}.verdict.fail .vt{color:var(--red)}.verdict.warn .vt{color:#7a5a20}
+.vchecks{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.cp{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:4px}
+.cp.ok{background:rgba(45,107,69,.12);color:var(--green)}.cp.nok{background:rgba(184,50,50,.12);color:var(--red)}.cp.meh{background:rgba(201,168,76,.15);color:#7a5a20}
+
+/* WATERFALL */
+.wf{display:flex;flex-direction:column;gap:2px;margin-top:14px}
+.wr{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;font-size:13px;border-radius:4px}
+.wr.inc{background:rgba(45,107,69,.08)}.wr.exp{background:rgba(184,50,50,.06)}
+.wr.net{background:var(--pine);color:#fff;font-weight:700;border-radius:5px;margin-top:5px;padding:12px 14px}
+.wr .n{font-family:'DM Mono',monospace;font-weight:500}
+
+/* ACQ LINES */
+.al{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--rule);font-size:13px}
+.al:last-child{border-bottom:none}.al.tot{font-weight:700;font-size:14px;color:var(--pine)}
+.al .n{font-family:'DM Mono',monospace}
+
+/* OFFER CARDS */
+.oc{border:2px solid var(--pine);border-radius:9px;overflow:hidden}
+.oh{background:var(--pine);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.oht{font-family:'DM Serif Display',serif;font-size:18px}
+.obadge{background:var(--terra);color:#fff;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+.ob{padding:20px}
+.ol{display:flex;justify-content:space-between;padding:7px 0;font-size:13px;border-bottom:1px solid var(--rule)}
+.ol:last-child{border-bottom:none}.ol .n{font-family:'DM Mono',monospace;font-weight:600;color:var(--pine)}
+.okm{background:var(--bone);border-radius:5px;padding:10px 14px;margin-top:10px;display:flex;justify-content:space-between;align-items:center}
+
+/* INVESTOR HERO */
+.ihero{background:linear-gradient(135deg,var(--pine) 0%,var(--pine2) 100%);color:#fff;border-radius:10px;padding:32px 36px;margin-bottom:20px}
+.ihe{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mint);margin-bottom:7px}
+.iht{font-family:'DM Serif Display',serif;font-size:32px;line-height:1.1;margin-bottom:7px}
+.ihs{font-size:14px;color:var(--mint);max-width:480px;line-height:1.5}
+.ims{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+.im{background:rgba(255,255,255,.1);border-radius:7px;padding:16px 18px}
+.imv{font-family:'DM Mono',monospace;font-size:24px;font-weight:500;color:var(--terra2)}
+.iml{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--mint);margin-top:3px}
+
+/* SUGGESTIONS PANEL */
+.sugg{background:rgba(201,168,76,.08);border:1px solid var(--gold);border-radius:7px;padding:16px 20px;margin-top:18px}
+.sugg-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7a5a20;margin-bottom:10px}
+.sugg-item{font-size:12px;color:#5a4010;line-height:1.6;padding:3px 0;display:flex;gap:8px}
+.sugg-item::before{content:"→";color:var(--gold);flex-shrink:0}
+
+@media(max-width:960px){.g2,.g3,.mrow,.ims{grid-template-columns:1fr 1fr}.view{padding:18px 14px}}
+@media(max-width:600px){.g2,.g3,.mrow,.ims{grid-template-columns:1fr}.hdr{padding:0 14px}.ntab{padding:6px 9px;font-size:10px}}
+
+/* INFINITE RETURN */
+@keyframes infPulse{0%,100%{box-shadow:0 0 0 0 rgba(100,255,150,0);background:rgba(255,255,255,.1)}50%{box-shadow:0 0 32px 8px rgba(100,255,150,.4);background:rgba(100,255,150,.2)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes sweep{0%{left:-100%}100%{left:200%}}
+.inf-tile{animation:infPulse 2s ease-in-out infinite;border:2px solid rgba(100,255,150,.7)!important}
+.inf-val{background:linear-gradient(90deg,#7fff9a,#fff,#ffd700,#fff,#7fff9a);background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 2.5s linear infinite;font-size:38px!important;line-height:1}
+.inf-lbl{color:#7fff9a!important}
+.inf-banner{background:linear-gradient(135deg,rgba(30,80,45,.95),rgba(60,50,15,.95));border:2px solid #7fff9a;border-radius:8px;padding:18px 20px;margin-top:10px;position:relative;overflow:hidden;color:white}
+.inf-banner::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:sweep 3s linear infinite}
+/* LOCK STYLES */
+.lockable:disabled{opacity:1;cursor:default;pointer-events:none}
+input[type=range].lockable:disabled{opacity:.35;pointer-events:none}
+.locked-overlay{position:relative}.locked-overlay::after{content:'';position:absolute;inset:0;border-radius:6px;background:rgba(31,54,40,.03);pointer-events:none}
+#deal-terms-card.is-locked{background:var(--bone);border:1px dashed rgba(30,50,35,.2)}
+#deal-terms-card.is-locked .nf{background:white;border-color:rgba(30,50,35,.15);color:var(--pine);cursor:default}
+
+/* LOGIN GATE */
+#login-gate{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#1f3628 0%,#2d4f3c 100%);display:flex;align-items:center;justify-content:center;padding:24px;font-family:'DM Sans',sans-serif}
+.lg-card{background:#faf8f3;border-radius:14px;padding:38px 34px;max-width:400px;width:100%;box-shadow:0 24px 70px rgba(0,0,0,.4);text-align:center}
+.lg-logo{font-family:'DM Serif Display',serif;font-size:26px;color:#1f3628;margin-bottom:4px}
+.lg-logo span{color:#c4622d}
+.lg-eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#c4622d;font-weight:600;margin-bottom:18px}
+.lg-sub{font-size:13px;color:#5a5a50;line-height:1.5;margin-bottom:22px}
+.lg-field{text-align:left;margin-bottom:14px}
+.lg-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5a5a50;margin-bottom:5px}
+.lg-field input{width:100%;font-family:'DM Sans',sans-serif;font-size:15px;padding:11px 14px;border:1px solid rgba(30,50,35,.3);border-radius:7px;outline:none;color:#1a1a16;background:#fff}
+.lg-field input:focus{border-color:#1f3628}
+.lg-btn{width:100%;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:13px;border:none;border-radius:7px;background:#c4622d;color:#fff;cursor:pointer;margin-top:6px;transition:background .15s}
+.lg-btn:hover{background:#e07848}
+.lg-btn:disabled{opacity:.6;cursor:default}
+.lg-err{display:none;font-size:12px;color:#b83232;font-weight:600;margin-top:12px}
+.lg-foot{font-size:10px;color:#9a9a8e;line-height:1.5;margin-top:22px;padding-top:16px;border-top:1px solid rgba(30,50,35,.12)}
+</style>
+<script>
+/* === auth.js (inlined) === */
+/* ============================================================
+   Larabee Homes — Investor Portal Access Control
+   ============================================================
+
+   This file controls who can log in. There are two kinds of
+   accounts:
+
+     • "operator"  — that's you. Sees all three tabs
+                     (Operator, Offer Builder, Investor View).
+
+     • "investor"  — sees ONLY the clean, read-only Investor
+                     View, locked to the deal terms you set.
+
+   ------------------------------------------------------------
+   HOW TO ADD OR CHANGE A LOGIN
+   ------------------------------------------------------------
+   You never type a raw password into this file. Instead:
+
+     1. Open  add-investor.html  in your browser.
+     2. Type a username + password, click "Generate".
+     3. Copy the line it gives you.
+     4. Paste it into the ACCOUNTS list below.
+     5. Save the file and commit (GitHub "Commit changes").
+
+   To remove someone's access, delete their line and commit.
+   To change a password, regenerate and replace their line.
+
+   NOTE: This is a soft gate for private marketing material.
+   It keeps the page from being casually opened, shared, or
+   indexed by Google. It is not bank-grade security — do not
+   put sensitive personal or financial records behind it.
+   ============================================================ */
+
+window.LARABEE_ACCOUNTS = [
+
+  // ---- OPERATOR (you) -------------------------------------
+  // Default login:  username "cade"  /  password "Larabee!Op2026"
+  // CHANGE THIS PASSWORD using add-investor.html before sharing.
+  {
+    user: "cade",
+    role: "operator",
+    name: "Cade Larabee",
+    salt: "c33a6f0c920e8364",
+    hash: "e62fd72c11637a87232a61507f276d50b53f200e5d9003e6012176c42b0d6fac"
+  },
+
+  // ---- SAMPLE INVESTOR ------------------------------------
+  // Default login:  username "investor"  /  password "Pamalee2026"
+  // Give each real investor their OWN line (copy this block).
+  // The "deal" string locks the numbers THEY see. Leave it as-is
+  // to use the standard Pamalee terms, or generate a custom one.
+  {
+    user: "investor",
+    role: "investor",
+    name: "Demo Investor",
+    salt: "3d129f1508c68f26",
+    hash: "ab343d9125522b98741ee9f723ebe71f81ac939a16c5a56375065e6da6fc5b33",
+    deal: "f-ivp=95600&f-ivrate=5.20&f-ivterm=30&f-ivrent=1250&f-ivlot=375&f-ivconsult=45&f-ivins=42&f-ivmaint=40&f-ivcapex=40&ivd-dollars=33460&ivvac-dollars=31&deal-name=Pamalee+MHP+-+Fayetteville&locked=1"
+  },
+
+];
+
+/* ============================================================
+   Engine below — you don't need to edit anything past here.
+   ============================================================ */
+(function () {
+  const SESSION_KEY = "larabee-session";
+
+  async function sha256hex(str) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  function findAccount(user) {
+    const u = (user || "").trim().toLowerCase();
+    return (window.LARABEE_ACCOUNTS || []).find(a => a.user.toLowerCase() === u) || null;
+  }
+
+  // Attempt a login. Returns the account on success, or null.
+  async function attemptLogin(user, pass) {
+    const acct = findAccount(user);
+    if (!acct) return null;
+    const h = await sha256hex(acct.salt + ":" + (pass || ""));
+    return h === acct.hash ? acct : null;
+  }
+
+  function saveSession(acct) {
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({ user: acct.user, t: Date.now() }));
+    } catch (e) { /* private mode — session just won't persist on refresh */ }
+  }
+
+  function readSession() {
+    try {
+      const raw = sessionStorage.getItem(SESSION_KEY);
+      if (!raw) return null;
+      const s = JSON.parse(raw);
+      return findAccount(s.user);
+    } catch (e) { return null; }
+  }
+
+  function clearSession() {
+    try { sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
+  }
+
+  // Reveal the app for a given account and configure the view by role.
+  function enterApp(acct) {
+    const gate = document.getElementById("login-gate");
+
+    if (acct.role === "investor") {
+      // Lock the page to this investor's deal terms and strip all
+      // operator-facing controls. Reuses the app's built-in
+      // investor lockdown (defined in index.html).
+      window.__INVESTOR_DEAL = acct.deal || "locked=1";
+      if (typeof window.applyUrlParams === "function") {
+        try { window.applyUrlParams(); } catch (e) { console.warn(e); }
+      }
+    }
+    // Operator: leave the full app as-is (all tabs visible).
+
+    if (gate) gate.style.display = "none";
+    document.body.style.overflow = "";
+    addLogoutButton(acct);
+  }
+
+  function addLogoutButton(acct) {
+    if (document.getElementById("larabee-logout")) return;
+    const btn = document.createElement("button");
+    btn.id = "larabee-logout";
+    btn.textContent = "Log out";
+    btn.title = "Signed in as " + (acct.name || acct.user);
+    btn.setAttribute("style",
+      "position:fixed;bottom:14px;right:14px;z-index:2000;" +
+      "font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;" +
+      "letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;" +
+      "border:1px solid rgba(255,255,255,.4);border-radius:20px;" +
+      "background:#1f3628;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)");
+    btn.onclick = function () {
+      clearSession();
+      location.reload();
+    };
+    document.body.appendChild(btn);
+  }
+
+  // Wire up the login form once the DOM is ready.
+  function init() {
+    const form = document.getElementById("login-form");
+    const err = document.getElementById("login-error");
+
+    // Already signed in this session? Skip straight to the app.
+    const existing = readSession();
+    if (existing) {
+      // Defer until the app's own init has defined applyUrlParams.
+      window.addEventListener("load", () => enterApp(existing));
+      // Hide gate immediately to avoid a flash.
+      const gate = document.getElementById("login-gate");
+      if (gate) gate.style.display = "none";
+      return;
+    }
+
+    document.body.style.overflow = "hidden"; // lock scroll behind gate
+
+    if (form) {
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (err) err.style.display = "none";
+        const user = document.getElementById("login-user").value;
+        const pass = document.getElementById("login-pass").value;
+        const submitBtn = document.getElementById("login-submit");
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Checking…"; }
+
+        const acct = await attemptLogin(user, pass);
+
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Enter"; }
+
+        if (acct) {
+          saveSession(acct);
+          enterApp(acct);
+        } else if (err) {
+          err.style.display = "block";
+          const passEl = document.getElementById("login-pass");
+          if (passEl) { passEl.value = ""; passEl.focus(); }
+        }
+      });
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+  // Expose for the credential generator page.
+  window.LarabeeAuth = { sha256hex };
+})();
+
+</script></head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     LOGIN GATE — shown until a valid login
+══════════════════════════════════════════ -->
+<div id="login-gate">
+  <div class="lg-card">
+    <div class="lg-logo">Larabee <span>Homes</span></div>
+    <div class="lg-eyebrow">Private Investor Portal</div>
+    <div class="lg-sub">Enter the username and password provided to you to view this investment opportunity.</div>
+    <form id="login-form" autocomplete="on">
+      <div class="lg-field">
+        <label for="login-user">Username</label>
+        <input id="login-user" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required="">
+      </div>
+      <div class="lg-field">
+        <label for="login-pass">Password</label>
+        <input id="login-pass" name="password" type="password" autocomplete="current-password" required="">
+      </div>
+      <button id="login-submit" class="lg-btn" type="submit">Enter</button>
+      <div id="login-error" class="lg-err">Incorrect username or password. Please try again.</div>
+    </form>
+    <div class="lg-foot">Access is provided by Larabee Homes LLC for the named recipient only. This material is confidential and not an offer to sell securities.</div>
+  </div>
+</div>
+
+<div class="hdr">
+  <div class="logo">Larabee <span>Homes</span></div>
+  <div class="nav">
+    <button class="ntab" onclick="switchTab('operator',this)">Operator</button>
+    <button class="ntab" onclick="switchTab('offers',this)">Offer Builder</button>
+    <button class="ntab active" onclick="switchTab('investor',this)">Investor View</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 1 — OPERATOR
+══════════════════════════════════════════ -->
+<div id="tab-operator" class="view">
+  <div class="vhead">
+    <div class="veyebrow">Deal Analyzer</div>
+    <div class="vtitle">Operator Dashboard</div>
+    <div class="vsub">Full deal economics — acquisition, home program, scale, and coverage.</div>
+  </div>
+
+  <div class="mrow">
+    <div class="mtile good" id="m-ncf"><div class="mval" id="m-ncf-v">$6,620</div><div class="mlbl">Net Cash Flow / mo</div><div class="msub" id="m-ncf-s">$17,940/mo income</div></div>
+    <div class="mtile " id="m-annual"><div class="mval" id="m-annual-v">$215K</div><div class="mlbl">Annual Program Income</div><div class="msub" id="m-annual-s">20 pads × $897</div></div>
+    <div class="mtile good" id="m-dscr"><div class="mval" id="m-dscr-v">2.11×</div><div class="mlbl">DSCR</div><div class="msub">Target ≥ 1.25×</div></div>
+    <div class="mtile good" id="m-yield"><div class="mval" id="m-yield-v">15.6%</div><div class="mlbl">Yield on Capex</div><div class="msub">Per home annualized</div></div>
+    <div class="mtile " id="m-equity"><div class="mval" id="m-equity-v">$0</div><div class="mlbl">Equity Required</div><div class="msub" id="m-equity-s">Cash to close</div></div>
+  </div>
+
+  <div class="g2 gap">
+    <!-- LEFT: ACQUISITION -->
+    <div class="card">
+      <div class="ctitle">Park Acquisition</div>
+
+      <div class="modebar">
+        <button class="mbtn on" id="mb-seller" onclick="setFinMode('seller')">Seller Carry</button>
+        <button class="mbtn" id="mb-firstlien" onclick="setFinMode('firstlien')">First Lien Only</button>
+        <button class="mbtn" id="mb-outside" onclick="setFinMode('outside')">Outside Capital</button>
+      </div>
+
+      <!-- Purchase price always shown -->
+      <div class="ig">
+        <div class="ilr"><span class="il">Purchase Price</span><input class="nf" id="f-price" value="1250000" oninput="sf('price')" onblur="cf('price')"></div>
+        <input type="range" id="s-price" min="500000" max="3000000" step="10000" value="1250000" oninput="ss('price')">
+      </div>
+
+      <!-- SELLER CARRY MODE -->
+      <div class="msec show" id="ms-seller">
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank First Mortgage</span>
+            <div style="display:flex;align-items:center;gap:3px">
+              <div class="pt"><button class="pb on" id="bank-d" onclick="sm('bank','d')">$</button><button class="pb" id="bank-p" onclick="sm('bank','p')">%</button></div>
+              <input class="nf" id="f-bank" value="950000" style="width:95px" oninput="sf('bank')" onblur="cf('bank')">
+            </div>
+          </div>
+          <input type="range" id="s-bank" min="300000" max="2500000" step="10000" value="950000" oninput="ss('bank')">
+          <div class="hint" id="h-bank">76.0% of purchase price</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Seller Second Note</span>
+            <div style="display:flex;align-items:center;gap:3px">
+              <div class="pt"><button class="pb on" id="seller-d" onclick="sm('seller','d')">$</button><button class="pb" id="seller-p" onclick="sm('seller','p')">%</button></div>
+              <input class="nf" id="f-seller" value="300000" style="width:95px" oninput="sf('seller')" onblur="cf('seller')">
+            </div>
+          </div>
+          <input type="range" id="s-seller" min="0" max="1000000" step="10000" value="300000" oninput="ss('seller')">
+          <div class="hint" id="h-seller">24.0% of purchase price</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Seller Rate (IO %)</span><input class="nf" id="f-srate" value="6.00" oninput="sf('srate')" onblur="cf('srate')"></div>
+          <input type="range" id="s-srate" min="3" max="12" step="0.25" value="6" oninput="ss('srate')">
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank Rate (%)</span><input class="nf" id="f-brate" value="7.50" oninput="sf('brate')" onblur="cf('brate')"></div>
+          <input type="range" id="s-brate" min="4" max="14" step="0.25" value="7.5" oninput="ss('brate')">
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank Term (yrs)</span><input class="nf" id="f-bterm" value="25" oninput="sf('bterm')" onblur="cf('bterm')"></div>
+          <input type="range" id="s-bterm" min="10" max="30" step="5" value="25" oninput="ss('bterm')">
+        </div>
+      </div>
+
+      <!-- FIRST LIEN ONLY -->
+      <div class="msec" id="ms-firstlien">
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank First Mortgage</span>
+            <div style="display:flex;align-items:center;gap:3px">
+              <div class="pt"><button class="pb on" id="flb-d" onclick="sm('flb','d')">$</button><button class="pb" id="flb-p" onclick="sm('flb','p')">%</button></div>
+              <input class="nf" id="f-flb" value="875000" style="width:95px" oninput="sf('flb')" onblur="cf('flb')">
+            </div>
+          </div>
+          <input type="range" id="s-flb" min="300000" max="2500000" step="10000" value="875000" oninput="ss('flb')">
+          <div class="hint" id="h-flb">70.0% of purchase price</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank Rate (%)</span><input class="nf" id="f-flrate" value="7.50" oninput="sf('flrate')" onblur="cf('flrate')"></div>
+          <input type="range" id="s-flrate" min="4" max="14" step="0.25" value="7.5" oninput="ss('flrate')">
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank Term (yrs)</span><input class="nf" id="f-flterm" value="25" oninput="sf('flterm')" onblur="cf('flterm')"></div>
+          <input type="range" id="s-flterm" min="10" max="30" step="5" value="25" oninput="ss('flterm')">
+        </div>
+      </div>
+
+      <!-- OUTSIDE CAPITAL -->
+      <div class="msec" id="ms-outside">
+        <div class="ocnote">⚠ No seller financing. Model equity gap as LP/JV/private capital at a preferred return. Your promote comes from cashflow above the pref.</div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank First Mortgage</span>
+            <div style="display:flex;align-items:center;gap:3px">
+              <div class="pt"><button class="pb on" id="ocb-d" onclick="sm('ocb','d')">$</button><button class="pb" id="ocb-p" onclick="sm('ocb','p')">%</button></div>
+              <input class="nf" id="f-ocb" value="875000" style="width:95px" oninput="sf('ocb')" onblur="cf('ocb')">
+            </div>
+          </div>
+          <input type="range" id="s-ocb" min="300000" max="2500000" step="10000" value="875000" oninput="ss('ocb')">
+          <div class="hint" id="h-ocb">70.0% of purchase price</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Outside Capital (equity gap)</span>
+            <div style="display:flex;align-items:center;gap:3px">
+              <div class="pt"><button class="pb on" id="oceq-d" onclick="sm('oceq','d')">$</button><button class="pb" id="oceq-p" onclick="sm('oceq','p')">%</button></div>
+              <input class="nf" id="f-oceq" value="375000" style="width:95px" oninput="sf('oceq')" onblur="cf('oceq')">
+            </div>
+          </div>
+          <input type="range" id="s-oceq" min="0" max="1500000" step="10000" value="375000" oninput="ss('oceq')">
+          <div class="hint" id="h-oceq">30.0% of purchase price</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">LP Preferred Return (%)</span><input class="nf" id="f-ocpref" value="8.00" oninput="sf('ocpref')" onblur="cf('ocpref')"></div>
+          <input type="range" id="s-ocpref" min="4" max="16" step="0.25" value="8" oninput="ss('ocpref')">
+          <div class="hint">Monthly preferred return on outside capital</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank Rate (%)</span><input class="nf" id="f-ocrate" value="7.50" oninput="sf('ocrate')" onblur="cf('ocrate')"></div>
+          <input type="range" id="s-ocrate" min="4" max="14" step="0.25" value="7.5" oninput="ss('ocrate')">
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank Term (yrs)</span><input class="nf" id="f-octerm" value="25" oninput="sf('octerm')" onblur="cf('octerm')"></div>
+          <input type="range" id="s-octerm" min="10" max="30" step="5" value="25" oninput="ss('octerm')">
+        </div>
+      </div>
+
+      <!-- PARK OPERATING EXPENSES -->
+      <div style="margin-top:6px;padding-top:12px;border-top:1px dashed var(--rule)">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:10px">Park-Level Operating Expenses / mo</div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Property Tax (est.)</span><input class="nf" id="f-ptax" value="800" oninput="sf('ptax')" onblur="cf('ptax')"></div>
+          <input type="range" id="s-ptax" min="0" max="5000" step="50" value="800" oninput="ss('ptax')">
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Park Insurance</span><input class="nf" id="f-pins" value="600" oninput="sf('pins')" onblur="cf('pins')"></div>
+          <input type="range" id="s-pins" min="0" max="4000" step="50" value="600" oninput="ss('pins')">
+          <div class="hint">Liability + property coverage on park infrastructure</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Utilities (common area)</span><input class="nf" id="f-util" value="300" oninput="sf('util')" onblur="cf('util')"></div>
+          <input type="range" id="s-util" min="0" max="3000" step="50" value="300" oninput="ss('util')">
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Management / Admin</span><input class="nf" id="f-mgmt" value="400" oninput="sf('mgmt')" onblur="cf('mgmt')"></div>
+          <input type="range" id="s-mgmt" min="0" max="3000" step="50" value="400" oninput="ss('mgmt')">
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Maintenance Reserve</span><input class="nf" id="f-maint" value="500" oninput="sf('maint')" onblur="cf('maint')"></div>
+          <input type="range" id="s-maint" min="0" max="3000" step="50" value="500" oninput="ss('maint')">
+          <div class="hint">Roads, common infrastructure, pad upkeep</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Vacancy / Collection Loss</span><input class="nf" id="f-vac" value="200" oninput="sf('vac')" onblur="cf('vac')"></div>
+          <input type="range" id="s-vac" min="0" max="2000" step="50" value="200" oninput="ss('vac')">
+          <div class="hint">Est. monthly loss from non-payment or vacancy</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: HOME PROGRAM -->
+    <div class="card">
+      <div class="ctitle">Home Program — Per Pad</div>
+
+      <div class="ig">
+        <div class="ilr"><span class="il">Lot Rent (your take / mo)</span><input class="nf" id="f-lotrent" value="300" oninput="sf('lotrent')" onblur="cf('lotrent')"></div>
+        <input type="range" id="s-lotrent" min="50" max="800" step="5" value="300" oninput="ss('lotrent')">
+        <div class="hint">Net to you after 21st mortgage program split</div>
+      </div>
+      <div class="ig">
+        <div class="ilr"><span class="il">Note Payment to You / mo</span><input class="nf" id="f-notepmt" value="447" oninput="sf('notepmt')" onblur="cf('notepmt')"></div>
+        <input type="range" id="s-notepmt" min="100" max="1200" step="1" value="447" oninput="ss('notepmt')">
+        <div class="hint">Monthly P+I on seller-financed home note</div>
+      </div>
+      <div class="ig">
+        <div class="ilr"><span class="il">Consulting Fee / mo</span><input class="nf" id="f-consult" value="75" oninput="sf('consult')" onblur="cf('consult')"></div>
+        <input type="range" id="s-consult" min="0" max="300" step="5" value="75" oninput="ss('consult')">
+      </div>
+      <div class="ig">
+        <div class="ilr"><span class="il">Home Insurance / Warranty (billed to investor)</span><input class="nf" id="f-homins" value="75" oninput="sf('homins')" onblur="cf('homins')"></div>
+        <input type="range" id="s-homins" min="0" max="300" step="5" value="75" oninput="ss('homins')">
+        <div class="hint">Pass-through to investor — shows in their waterfall as an expense</div>
+      </div>
+
+      <div style="margin-top:4px;padding-top:10px;border-top:1px dashed var(--rule)">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:10px">Capex &amp; Financing</div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Full Capex Per Home (all-in)</span><input class="nf" id="f-capex" value="69200" oninput="sf('capex')" onblur="cf('capex')"></div>
+          <input type="range" id="s-capex" min="10000" max="150000" step="1000" value="69200" oninput="ss('capex')">
+          <div class="hint" id="capex-hint">Home purchase + rehab + skirting + steps</div>
+        </div>
+
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);margin-bottom:6px">Home Financing Method</div>
+        <div class="cbar">
+          <button class="cbtn on" id="ch-self" onclick="setChattel('self')">Self-Fund</button>
+          <button class="cbtn" id="ch-21st" onclick="setChattel('21st')">21st Mortgage</button>
+          <button class="cbtn" id="ch-chattel" onclick="setChattel('chattel')">Chattel Loan</button>
+        </div>
+
+        <div class="csec show" id="cs-self">
+          <div class="hint" style="margin-bottom:10px">Full capex above comes out of pocket. Investor down partially offsets.</div>
+        </div>
+        <div class="csec" id="cs-21st">
+          <div class="ig">
+            <div class="ilr"><span class="il">21st Loan Amount</span><input class="nf" id="f-c21amt" value="48960" oninput="sf('c21amt')" onblur="cf('c21amt')"></div>
+            <input type="range" id="s-c21amt" min="20000" max="120000" step="1000" value="48960" oninput="ss('c21amt')">
+            <div class="hint">Invoice + 2% origination</div>
+          </div>
+          <div class="ig">
+            <div class="ilr"><span class="il">21st Rate (%)</span><input class="nf" id="f-c21rate" value="9.50" oninput="sf('c21rate')" onblur="cf('c21rate')"></div>
+            <input type="range" id="s-c21rate" min="6" max="14" step="0.25" value="9.5" oninput="ss('c21rate')">
+          </div>
+          <div class="ig">
+            <div class="ilr"><span class="il">21st Term (yrs)</span><input class="nf" id="f-c21term" value="15" oninput="sf('c21term')" onblur="cf('c21term')"></div>
+            <input type="range" id="s-c21term" min="10" max="25" step="1" value="15" oninput="ss('c21term')">
+          </div>
+          <div id="sum-21st" style="background:var(--bone);border-radius:5px;padding:9px 12px;font-size:11px;color:var(--mid)"></div>
+        </div>
+        <div class="csec" id="cs-chattel">
+          <div class="ig">
+            <div class="ilr"><span class="il">Chattel Loan Amount</span><input class="nf" id="f-chamt" value="50000" oninput="sf('chamt')" onblur="cf('chamt')"></div>
+            <input type="range" id="s-chamt" min="20000" max="130000" step="1000" value="50000" oninput="ss('chamt')">
+          </div>
+          <div class="ig">
+            <div class="ilr"><span class="il">Chattel Rate (%)</span><input class="nf" id="f-chrate" value="10.00" oninput="sf('chrate')" onblur="cf('chrate')"></div>
+            <input type="range" id="s-chrate" min="6" max="18" step="0.25" value="10" oninput="ss('chrate')">
+            <div class="hint">Typically 8–14% depending on lender and credit</div>
+          </div>
+          <div class="ig">
+            <div class="ilr"><span class="il">Chattel Term (yrs)</span><input class="nf" id="f-chterm" value="20" oninput="sf('chterm')" onblur="cf('chterm')"></div>
+            <input type="range" id="s-chterm" min="10" max="25" step="1" value="20" oninput="ss('chterm')">
+          </div>
+          <div id="sum-chattel" style="background:var(--bone);border-radius:5px;padding:9px 12px;font-size:11px;color:var(--mid)"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--rule)">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:10px">Scale</div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Homes Placed</span><input class="nf" id="f-homes" value="20" oninput="sf('homes')" onblur="cf('homes')"></div>
+          <input type="range" id="s-homes" min="1" max="49" step="1" value="20" oninput="ss('homes')">
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Investor Down Payment</span>
+            <div style="display:flex;align-items:center;gap:3px">
+              <div class="pt"><button class="pb on" id="invd-d" onclick="sm('invd','d')">$</button><button class="pb" id="invd-p" onclick="sm('invd','p')">%</button></div>
+              <input class="nf" id="f-invd" value="40000" style="width:95px" oninput="sf('invd')" onblur="cf('invd')">
+            </div>
+          </div>
+          <input type="range" id="s-invd" min="5000" max="120000" step="1000" value="40000" oninput="ss('invd')">
+          <div class="hint" id="h-invd">40.0% of $100K home sale</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS ROW -->
+  <div class="g2 gap">
+    <div class="card">
+      <div class="ctitle">Per-Home Income &amp; Full Waterfall</div>
+      <div class="wf" id="wf-home"><div class="wr inc"><span>Lot Rent</span><span class="n" style="color:var(--green)">$300</span></div><div class="wr inc"><span>Note Payment</span><span class="n" style="color:var(--green)">$447</span></div><div class="wr inc"><span>Consulting Fee</span><span class="n" style="color:var(--green)">$75</span></div><div class="wr inc"><span>Ins/Warranty (pass-thru)</span><span class="n" style="color:var(--green)">$75</span></div><div class="wr net"><span>Net to You / mo</span><span class="n" style="color:#fff">$897</span></div></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Acquisition — Capital Stack &amp; Debt Service</div>
+      <div id="acq-stack">
+    <div class="al"><span>Purchase Price</span><span class="n">$1,250,000</span></div>
+    <div class="al"><span>Bank First Mortgage</span><span class="n neg">($950,000)</span></div><div class="al"><span>Seller Second Note</span><span class="n neg">($300,000)</span></div>
+    <div class="al tot"><span>Equity Required</span><span class="n">$0</span></div>
+    <div class="al"><span style="font-size:11px;color:var(--mid)">Bank P+I / mo</span><span class="n" style="font-family:'DM Mono',monospace">$7,020</span></div><div class="al"><span style="font-size:11px;color:var(--mid)">Seller IO / mo</span><span class="n" style="font-family:'DM Mono',monospace">$1,500</span></div>
+    <div class="al"><span style="font-size:11px;color:var(--mid)">Park OpEx / mo</span><span class="n" style="font-family:'DM Mono',monospace">$2,800</span></div>
+    <div class="al tot"><span>Total Monthly Obligations</span><span class="n">$11,320</span></div></div>
+    </div>
+  </div>
+
+  <div class="g2 gap">
+    <div class="card">
+      <div class="ctitle">Portfolio Scale (at homes placed)</div>
+      <table class="dt" id="scale-tbl">
+    <tbody><tr><th>Metric</th><th style="text-align:right">Value</th></tr>
+    <tr><td>Homes placed</td><td class="n">20</td></tr>
+    <tr><td>Investor downs collected</td><td class="n pos">$800,000</td></tr>
+    <tr><td>Effective capex deployed</td><td class="n neg">($1,384,000)</td></tr>
+    <tr class="tot"><td>Net cash at close</td><td class="n neg">$-584,000</td></tr>
+    <tr><td>Monthly program income</td><td class="n">$17,940</td></tr>
+    <tr><td>Park OpEx / mo</td><td class="n neg">($2,800)</td></tr>
+    <tr><td>Debt service / mo</td><td class="n neg">($8,520)</td></tr>
+    <tr class="tot"><td>Net cash flow / mo</td><td class="n pos">$6,620</td></tr>
+  </tbody></table>
+    </div>
+    <div>
+      <div class="card">
+        <div class="ctitle">DSCR &amp; Cash Flow</div>
+        <table class="dt" id="dscr-tbl">
+    <tbody><tr><th>Metric</th><th style="text-align:right">Value</th></tr>
+    <tr><td>Program income / mo</td><td class="n pos">$17,940</td></tr>
+    <tr><td>Debt service / mo</td><td class="n neg">($8,520)</td></tr>
+    <tr class="tot"><td>DSCR</td><td class="n pos">2.11×</td></tr>
+    <tr><td>Park OpEx / mo</td><td class="n neg">($2,800)</td></tr>
+    <tr class="tot"><td>Net Cash Flow / mo</td><td class="n pos">$6,620</td></tr>
+  </tbody></table>
+      </div>
+      <div class="verdict warn" id="verdict">
+        <div class="vt" id="vt">⚠ Marginal — Review Flags</div>
+        <div class="vchecks" id="vchecks"><div class="cp ok">✓ DSCR 2.11× (≥1.25)</div><div class="cp ok">✓ NCF $6,620/mo</div><div class="cp ok">✓ Yield 15.6% (≥14%)</div><div class="cp nok">✗ Cap gap $584,000 short</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUGGESTIONS -->
+  <div class="sugg">
+    <div class="sugg-title">💡 Items You May Be Excluding</div>
+    <div class="sugg-item">Lot rent <strong>escalation clause</strong> — model assumes flat lot rent; even 3%/yr compounding materially changes 10-yr returns. Consider adding an annual bump toggle.</div>
+    <div class="sugg-item"><strong>Vacancy ramp</strong> — the model fills all pads immediately. In reality pad-fill takes 6–18 months. A ramp schedule would show true cash-on-cash at stabilization vs. acquisition.</div>
+    <div class="sugg-item"><strong>Eviction / legal costs</strong> — budget $500–1,500/event. At 49 pads with month-to-month tenants, plan for 2–3/year minimum.</div>
+    <div class="sugg-item"><strong>Home turn costs</strong> — when a tenant vacates, expect $2,000–5,000 in cleaning, minor repairs, and re-marketing before the next placement.</div>
+    <div class="sugg-item"><strong>Water/sewer master meter</strong> — if park is on master meter and sub-bills tenants, model the spread. If not, it's a direct park expense not captured here.</div>
+    <div class="sugg-item"><strong>Loan origination fees</strong> — 1–2% of bank note at closing is a real cash cost that should reduce your net cash at close calculation.</div>
+    <div class="sugg-item"><strong>Seller note balloon risk</strong> — at 3-yr balloon, model what the refinance looks like at current rates and whether DSCR survives a rate increase.</div>
+    <div class="sugg-item"><strong>Dealer margin</strong> — your Larabee Homes LLC dealer margin on each home sale (difference between invoice and retail sale price) is a separate profit center not reflected in the operator model here.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 2 — OFFER BUILDER
+══════════════════════════════════════════ -->
+<div id="tab-offers" class="view">
+  <div class="vhead">
+    <div class="veyebrow">Structuring Tool</div>
+    <div class="vtitle">Offer Builder</div>
+    <div class="vsub">Three offer structures side-by-side. Adjust terms and see deal math instantly.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px" class="gap" id="offer-grid">
+
+    <!-- OFFER 1: CASH + SELLER CARRY -->
+    <div class="oc">
+      <div class="oh"><div class="oht">Offer 1</div><div class="obadge">Bank + Seller 2nd</div></div>
+      <div class="ob">
+        <div class="ig"><div class="ilr"><span class="il">Purchase Price</span><input class="nf" id="f-o1p" value="1100000" oninput="sf('o1p')" onblur="cf('o1p')"></div><input type="range" id="s-o1p" min="500000" max="2500000" step="10000" value="1100000" oninput="ss('o1p')"></div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank First</span>
+            <div style="display:flex;align-items:center;gap:3px"><div class="pt"><button class="pb on" id="o1b-d" onclick="sm('o1b','d')">$</button><button class="pb" id="o1b-p" onclick="sm('o1b','p')">%</button></div><input class="nf" id="f-o1b" value="850000" style="width:90px" oninput="sf('o1b')" onblur="cf('o1b')"></div>
+          </div>
+          <input type="range" id="s-o1b" min="300000" max="2200000" step="10000" value="850000" oninput="ss('o1b')">
+          <div class="hint" id="h-o1b">77.3% of purchase price</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Seller Carry</span>
+            <div style="display:flex;align-items:center;gap:3px"><div class="pt"><button class="pb on" id="o1s-d" onclick="sm('o1s','d')">$</button><button class="pb" id="o1s-p" onclick="sm('o1s','p')">%</button></div><input class="nf" id="f-o1s" value="250000" style="width:90px" oninput="sf('o1s')" onblur="cf('o1s')"></div>
+          </div>
+          <input type="range" id="s-o1s" min="0" max="900000" step="10000" value="250000" oninput="ss('o1s')">
+          <div class="hint" id="h-o1s">22.7% of purchase price — IO 3 yr balloon</div>
+        </div>
+        <div class="ig"><div class="ilr"><span class="il">Seller Rate (%)</span><input class="nf" id="f-o1sr" value="5.00" oninput="sf('o1sr')" onblur="cf('o1sr')"></div><input type="range" id="s-o1sr" min="3" max="12" step="0.25" value="5" oninput="ss('o1sr')"></div>
+        <div class="ig"><div class="ilr"><span class="il">Balloon (yrs)</span><input class="nf" id="f-o1st" value="3" oninput="sf('o1st')" onblur="cf('o1st')"></div><input type="range" id="s-o1st" min="1" max="10" step="1" value="3" oninput="ss('o1st')"></div>
+        <div class="ig"><div class="ilr"><span class="il">Bank Rate (%)</span><input class="nf" id="f-o1br" value="7.50" oninput="sf('o1br')" onblur="cf('o1br')"></div><input type="range" id="s-o1br" min="4" max="14" step="0.25" value="7.5" oninput="ss('o1br')"></div>
+        <hr style="border:none;border-top:1px solid var(--rule);margin:10px 0">
+        <div id="o1-out">
+    <div class="ol"><span>Equity (cash to close)</span><span class="n">$0</span></div>
+    <div class="ol"><span>Bank P+I / mo</span><span class="n">$6,281</span></div>
+    <div class="ol"><span>Seller IO / mo (3-yr balloon)</span><span class="n">$1,042</span></div>
+    <div class="ol"><span>Park OpEx / mo</span><span class="n neg">($2,800)</span></div>
+  </div>
+        <div class="okm"><span style="font-size:12px;font-weight:600;color:var(--pine)">Cash to Close</span><span style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--pine)" id="o1-cop">$0</span></div>
+        <div class="okm"><span style="font-size:12px;font-weight:600;color:var(--pine)">Monthly Debt Service</span><span style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--terra)" id="o1-ds">$7,323</span></div>
+        <div class="okm"><span style="font-size:12px;font-weight:600;color:var(--pine)">NCF after DS &amp; OpEx</span><span style="font-family: &quot;DM Mono&quot;, monospace; font-size: 20px; font-weight: 500; color: var(--green);" id="o1-ncf">$7,817</span></div>
+      </div>
+    </div>
+
+    <!-- OFFER 2: FIRST LIEN ONLY / NO SELLER FINANCE -->
+    <div class="oc">
+      <div class="oh" style="background:var(--pine2)"><div class="oht">Offer 2</div><div class="obadge" style="background:#7a5a20">First Lien Only</div></div>
+      <div class="ob">
+        <div style="background:rgba(201,168,76,.1);border:1px solid var(--gold);border-radius:5px;padding:9px 11px;font-size:11px;color:#6a4e10;margin-bottom:12px">No seller financing. You fund the full equity gap — likely requires outside capital or reserves.</div>
+        <div class="ig"><div class="ilr"><span class="il">Purchase Price</span><input class="nf" id="f-o2p" value="1100000" oninput="sf('o2p')" onblur="cf('o2p')"></div><input type="range" id="s-o2p" min="500000" max="2500000" step="10000" value="1100000" oninput="ss('o2p')"></div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Bank First Mortgage</span>
+            <div style="display:flex;align-items:center;gap:3px"><div class="pt"><button class="pb on" id="o2b-d" onclick="sm('o2b','d')">$</button><button class="pb" id="o2b-p" onclick="sm('o2b','p')">%</button></div><input class="nf" id="f-o2b" value="770000" style="width:90px" oninput="sf('o2b')" onblur="cf('o2b')"></div>
+          </div>
+          <input type="range" id="s-o2b" min="300000" max="2200000" step="10000" value="770000" oninput="ss('o2b')">
+          <div class="hint" id="h-o2b">70.0% of purchase price</div>
+        </div>
+        <div class="ig"><div class="ilr"><span class="il">Bank Rate (%)</span><input class="nf" id="f-o2br" value="7.50" oninput="sf('o2br')" onblur="cf('o2br')"></div><input type="range" id="s-o2br" min="4" max="14" step="0.25" value="7.5" oninput="ss('o2br')"></div>
+        <div class="ig"><div class="ilr"><span class="il">Bank Term (yrs)</span><input class="nf" id="f-o2bt" value="25" oninput="sf('o2bt')" onblur="cf('o2bt')"></div><input type="range" id="s-o2bt" min="10" max="30" step="5" value="25" oninput="ss('o2bt')"></div>
+        <hr style="border:none;border-top:1px solid var(--rule);margin:10px 0">
+        <div id="o2-out">
+    <div class="ol"><span>Equity gap (cash / outside capital)</span><span class="n">$330,000</span></div>
+    <div class="ol"><span>Bank P+I / mo</span><span class="n">$5,690</span></div>
+    <div class="ol"><span>Park OpEx / mo</span><span class="n neg">($2,800)</span></div>
+  </div>
+        <div class="okm"><span style="font-size:12px;font-weight:600;color:var(--pine)">Cash to Close (equity gap)</span><span style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--pine)" id="o2-cop">$330,000</span></div>
+        <div class="okm"><span style="font-size:12px;font-weight:600;color:var(--pine)">Monthly Debt Service</span><span style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--terra)" id="o2-ds">$5,690</span></div>
+        <div class="okm"><span style="font-size:12px;font-weight:600;color:var(--pine)">NCF after DS &amp; OpEx</span><span style="font-family: &quot;DM Mono&quot;, monospace; font-size: 20px; font-weight: 500; color: var(--green);" id="o2-ncf">$9,450</span></div>
+      </div>
+    </div>
+
+    <!-- OFFER 3: MASTER LEASE + OPTION -->
+    <div class="oc">
+      <div class="oh" style="background:#1a3a28"><div class="oht">Offer 3</div><div class="obadge" style="background:var(--green)">Lease / Option</div></div>
+      <div class="ob">
+        <div class="ig"><div class="ilr"><span class="il">Monthly Lease Payment</span><input class="nf" id="f-o3l" value="7500" oninput="sf('o3l')" onblur="cf('o3l')"></div><input type="range" id="s-o3l" min="2000" max="25000" step="250" value="7500" oninput="ss('o3l')"></div>
+        <div class="ig"><div class="ilr"><span class="il">Option Price</span><input class="nf" id="f-o3op" value="1200000" oninput="sf('o3op')" onblur="cf('o3op')"></div><input type="range" id="s-o3op" min="500000" max="2500000" step="10000" value="1200000" oninput="ss('o3op')"></div>
+        <div class="ig"><div class="ilr"><span class="il">Option Period (months)</span><input class="nf" id="f-o3om" value="24" oninput="sf('o3om')" onblur="cf('o3om')"></div><input type="range" id="s-o3om" min="6" max="48" step="3" value="24" oninput="ss('o3om')"></div>
+        <div class="ig"><div class="ilr"><span class="il">Pads Filled by Exercise</span><input class="nf" id="f-o3pad" value="20" oninput="sf('o3pad')" onblur="cf('o3pad')"></div><input type="range" id="s-o3pad" min="1" max="49" step="1" value="20" oninput="ss('o3pad')"><div class="hint">Uses per-pad income from Operator tab</div></div>
+        <hr style="border:none;border-top:1px solid var(--rule);margin:10px 0">
+        <div id="o3-out">
+    <div class="ol"><span>Total lease (24 mo)</span><span class="n neg">($180,000)</span></div>
+    <div class="ol"><span>Program income at 20 pads / mo</span><span class="n pos">$17,940</span></div>
+    <div class="ol"><span>Break-even pads (lease+opex)</span><span class="n">12 pads</span></div>
+    <div class="ol"><span>Park OpEx / mo</span><span class="n neg">($2,800)</span></div>
+  </div>
+        <div class="okm"><span style="font-size:12px;font-weight:600;color:var(--pine)">Cash to Close</span><span style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--green)" id="o3-cop">$0</span></div>
+        <div class="okm"><span style="font-size:12px;font-weight:600;color:var(--pine)">Month-1 Net (Program − Lease)</span><span style="font-family: &quot;DM Mono&quot;, monospace; font-size: 20px; font-weight: 500; color: var(--green);" id="o3-m1">$7,640</span></div>
+        <div class="okm"><span style="font-size:12px;font-weight:600;color:var(--pine)">Investor Downs by Exercise</span><span style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--green)" id="o3-downs">$800,000</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="card gap">
+    <div class="ctitle">Head-to-Head Comparison</div>
+    <table class="dt" id="offer-cmp">
+    <tbody><tr><th>Metric</th><th style="text-align:right">Offer 1 — Seller Carry</th><th style="text-align:right">Offer 2 — First Lien</th><th style="text-align:right">Offer 3 — Lease/Option</th></tr>
+    <tr><td>Cash to close</td><td class="n">$0</td><td class="n neg">$330,000</td><td class="n pos">$0</td></tr>
+    <tr><td>Monthly debt/lease obligation</td><td class="n">$7,323</td><td class="n">$5,690</td><td class="n">$7,500</td></tr>
+    <tr><td>Break-even pads (covers DS+OpEx)</td><td class="n">12</td><td class="n">10</td><td class="n">12</td></tr>
+    <tr><td>DSCR (at 20 homes)</td><td class="n pos">2.45×</td><td class="n pos">3.15×</td><td class="n pos">N/A</td></tr>
+    <tr><td>Purchase / option price</td><td class="n">$1,100,000</td><td class="n">$1,100,000</td><td class="n">$1,200,000</td></tr>
+    <tr><td>Net cash flow / mo (at scale)</td><td class="n pos">$7,817</td><td class="n pos">$9,450</td><td class="n pos">$7,640</td></tr>
+    <tr><td>Seller financing required?</td><td class="n pos">Yes</td><td class="n neg">No</td><td class="n pos">No (lease)</td></tr>
+    <tr><td>Downside if deal fails</td><td class="n neg">Bank debt on books</td><td class="n neg">Bank debt + large equity</td><td class="n pos">Walk away</td></tr>
+  </tbody></table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 3 — INVESTOR VIEW
+══════════════════════════════════════════ -->
+<div id="tab-investor" class="view active">
+
+  <!-- DEAL MANAGER BAR -->
+  <div style="background:var(--bone);border:1px solid var(--rule);border-radius:8px;padding:12px 16px;margin-bottom:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:8px;flex:1;flex-wrap:wrap">
+        <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);white-space:nowrap">Saved Deals:</span>
+        <div id="deal-chips" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><div style="display:flex;align-items:center;gap:0;border-radius:20px;overflow:hidden;border:1px solid var(--pine)">
+      <button onclick="loadDeal('deal_1781361287060')" style="font-size:11px;font-weight:700;padding:4px 12px;background:var(--pine);color:white;border:none;cursor:pointer;white-space:nowrap">Pamalee MHP - Fayetteville</button>
+      <button onclick="deleteDeal('deal_1781361287060')" style="font-size:11px;padding:4px 8px;background:var(--pine);color:rgba(255,255,255,.6);border:none;border-left:1px solid rgba(255,255,255,.2);cursor:pointer" title="Delete">×</button>
+    </div></div>
+      </div>
+      <button onclick="openSaveDealModal()" style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:6px 14px;border:1px solid var(--pine);border-radius:4px;background:var(--pine);color:white;cursor:pointer;white-space:nowrap">💾 Save Deal</button>
+    </div>
+  </div>
+
+  <!-- SAVE DEAL MODAL -->
+  <div id="save-deal-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1001;align-items:center;justify-content:center">
+    <div style="background:white;border-radius:12px;padding:28px 32px;max-width:420px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+      <button onclick="closeSaveDealModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;color:var(--mid);cursor:pointer;line-height:1">×</button>
+      <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--pine);margin-bottom:6px">Save This Deal</div>
+      <div style="font-size:13px;color:var(--mid);margin-bottom:18px">Give it a name — park name, address, or anything you'll recognize.</div>
+      <input id="deal-name-input" type="text" placeholder="e.g. Pamalee MHP — Fayetteville" style="width:100%;font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 14px;border:1px solid rgba(30,50,35,.3);border-radius:6px;outline:none;color:var(--pine);margin-bottom:16px" onkeydown="if(event.key==='Enter')saveDeal()">
+      <div style="display:flex;gap:10px">
+        <button onclick="closeSaveDealModal()" style="flex:1;font-size:13px;font-weight:600;padding:10px;border:1px solid var(--rule);border-radius:6px;background:none;color:var(--mid);cursor:pointer">Cancel</button>
+        <button onclick="saveDeal()" style="flex:2;font-size:13px;font-weight:700;padding:10px;border:none;border-radius:6px;background:var(--pine);color:white;cursor:pointer">Save Deal</button>
+      </div>
+      <div id="save-confirm" style="display:none;margin-top:10px;font-size:12px;color:var(--green);font-weight:600;text-align:center"></div>
+    </div>
+  </div>
+
+  <!-- OPERATOR LOCK BAR -->
+  <div id="lock-bar" style="background:var(--pine2);border-radius:8px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:18px" id="lock-icon">🔒</span>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:white;letter-spacing:.06em" id="active-deal-name">Pamalee MHP - Fayetteville</div>
+        <div style="font-size:10px;color:var(--mint)" id="lock-sub-label">Locked by Larabee Homes — set for this opportunity</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button id="lock-toggle-btn" onclick="toggleLock()" style="font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 14px; border-color: var(--mint); border-top-style: ; border-top-width: ; border-right-style: ; border-right-width: ; border-bottom-style: ; border-bottom-width: ; border-left-style: ; border-left-width: ; border-image-source: ; border-image-slice: ; border-image-width: ; border-image-outset: ; border-image-repeat: ; border-radius: 4px; background: none; color: var(--mint); cursor: pointer;">Edit Deal Terms</button>
+      <button onclick="openShareModal()" style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:6px 16px;border:none;border-radius:4px;background:var(--terra);color:white;cursor:pointer;display:flex;align-items:center;gap:6px">📤 Send Deal</button>
+    </div>
+  </div>
+
+
+  <!-- SHARE MODAL -->
+  <div id="share-modal" style="display: none; position: fixed; inset: 0px; background: rgba(0, 0, 0, 0.6); z-index: 1000; align-items: center; justify-content: center;">
+    <div style="background:white;border-radius:12px;padding:28px 32px;max-width:520px;width:90%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+      <button onclick="closeShareModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;color:var(--mid);cursor:pointer;line-height:1">×</button>
+
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--pine);margin-bottom:5px">Send This Deal</div>
+      <div style="font-size:13px;color:var(--mid);margin-bottom:20px;line-height:1.5">Send investors a private link — no download, no app. They just open it and log in with the username &amp; password you give them.</div>
+
+      <!-- STEP 1: THE LINK -->
+      <div style="background:var(--bone);border-radius:8px;padding:16px 18px;margin-bottom:14px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);margin-bottom:10px">Step 1 — Copy the Investor Link</div>
+        <input id="investor-link" type="text" readonly="" style="width:100%;font-family:'DM Mono',monospace;font-size:12px;padding:9px 11px;border:1px solid rgba(30,50,35,.25);border-radius:6px;background:#fff;color:var(--pine);margin-bottom:8px">
+        <button onclick="copyInvestorLink()" style="width:100%;font-size:14px;font-weight:700;padding:11px;border:none;border-radius:6px;background:var(--pine);color:white;cursor:pointer">🔗 Copy Link</button>
+        <div style="font-size:11px;color:var(--mid);margin-top:8px;line-height:1.5">Same link for everyone. Each investor logs in with their own username &amp; password (manage these in <strong>add-investor.html</strong>).</div>
+      </div>
+
+      <!-- STEP 2: SEND -->
+      <div style="background:var(--bone);border-radius:8px;padding:16px 18px;margin-bottom:14px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);margin-bottom:10px">Step 2 — Send the Pitch + Their Login</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button onclick="shareViaEmail()" style="flex:1;font-size:12px;font-weight:600;padding:10px 14px;border:1px solid var(--pine);border-radius:6px;background:none;color:var(--pine);cursor:pointer">✉️ Email with Pitch</button>
+          <button onclick="copyPitchMessage()" style="flex:1;font-size:12px;font-weight:600;padding:10px 14px;border:none;border-radius:6px;background:var(--pine);color:white;cursor:pointer">📋 Copy Pitch Text</button>
+        </div>
+        <div style="font-size:11px;color:var(--mid);margin-top:8px;line-height:1.5">The pitch includes the link. Add the investor's username &amp; password before you send.</div>
+      </div>
+
+      <div id="share-confirm" style="display:none;font-size:12px;color:var(--green);font-weight:600;text-align:center;padding:6px 0"></div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="ihero">
+    <div class="ihe">Larabee Homes — Investment Opportunity</div>
+    <div class="iht">Own a Home.<br>Collect Monthly Income.</div>
+    <div class="ihs"></div>
+    <div class="ims">
+      <div class="im"><div class="imv" id="iv-coc">12.0%</div><div class="iml">Cash-on-Cash Return</div></div>
+      <div class="im"><div class="imv" id="iv-monthly">$336</div><div class="iml">Net Monthly Income</div></div>
+      <div class="im"><div class="imv" id="iv-annual">$4K</div><div class="iml">Annual Net Income</div></div>
+      <div class="im inf-tile"><div class="imv inf-val" id="iv-y1">∞</div><div class="iml inf-lbl">Tax Shield &gt; Down Payment</div></div>
+    </div>
+  </div>
+
+  <div class="g2 gap">
+    <!-- DEAL TERMS — LOCKABLE -->
+    <div class="card is-locked" id="deal-terms-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--rule)">
+        <div class="ctitle" style="margin:0;padding:0;border:none">Deal Terms <span id="lock-badge" style="font-size: 9px; background: var(--pine); color: var(--mint); padding: 2px 7px; border-radius: 10px; margin-left: 6px; letter-spacing: 0.08em; display: inline;">LOCKED</span></div>
+      </div>
+      <div id="deal-terms-inputs">
+        <div class="ig"><div class="ilr"><span class="il">Home Sale Price</span><input class="nf lockable" id="f-ivp" value="100000" oninput="sf('ivp')" onblur="cf('ivp')" readonly="" style="pointer-events: none; user-select: none;"></div><input type="range" id="s-ivp" min="40000" max="300000" step="1000" value="100000" oninput="ss('ivp')" class="lockable" style="pointer-events: none;"></div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Down Payment</span>
+            <div style="display:flex;align-items:center;gap:3px">
+              <div class="pt lockable-group"><button class="pb on lockable" id="ivd-d" onclick="sm('ivd','d')" tabindex="-1" style="pointer-events: none;">$</button><button class="pb lockable" id="ivd-p" onclick="sm('ivd','p')" tabindex="-1" style="pointer-events: none;">%</button></div>
+              <input class="nf lockable" id="f-ivd" value="40000" style="width: 90px; pointer-events: none; user-select: none;" oninput="sf('ivd')" onblur="cf('ivd')" readonly="">
+            </div>
+          </div>
+          <input type="range" id="s-ivd" min="5000" max="200000" step="1000" value="40000" oninput="ss('ivd')" class="lockable" style="pointer-events: none;">
+          <div class="hint" id="h-ivd">35.0% of sale price</div>
+        </div>
+        <div class="ig"><div class="ilr"><span class="il">Note Rate (%)</span><input class="nf lockable" id="f-ivrate" value="6.50" oninput="sf('ivrate')" onblur="cf('ivrate')" readonly="" style="pointer-events: none; user-select: none;"></div><input type="range" id="s-ivrate" min="4" max="14" step="0.25" value="6.5" oninput="ss('ivrate')" class="lockable" style="pointer-events: none;"></div>
+        <div class="ig"><div class="ilr"><span class="il">Note Term (yrs)</span><input class="nf lockable" id="f-ivterm" value="20" oninput="sf('ivterm')" onblur="cf('ivterm')" readonly="" style="pointer-events: none; user-select: none;"></div><input type="range" id="s-ivterm" min="5" max="30" step="1" value="20" oninput="ss('ivterm')" class="lockable" style="pointer-events: none;"></div>
+        <div class="ig"><div class="ilr"><span class="il">Monthly Rent (tenant pays)</span><input class="nf lockable" id="f-ivrent" value="925" oninput="sf('ivrent')" onblur="cf('ivrent')" readonly="" style="pointer-events: none; user-select: none;"></div><input type="range" id="s-ivrent" min="400" max="2000" step="25" value="925" oninput="ss('ivrent')" class="lockable" style="pointer-events: none;"></div>
+        <div class="ig"><div class="ilr"><span class="il">Lot Rent (deducted)</span><input class="nf lockable" id="f-ivlot" value="300" oninput="sf('ivlot')" onblur="cf('ivlot')" readonly="" style="pointer-events: none; user-select: none;"></div><input type="range" id="s-ivlot" min="50" max="800" step="10" value="300" oninput="ss('ivlot')" class="lockable" style="pointer-events: none;"></div>
+        <div class="ig"><div class="ilr"><span class="il">Consulting Fee</span><input class="nf lockable" id="f-ivconsult" value="75" oninput="sf('ivconsult')" onblur="cf('ivconsult')" readonly="" style="pointer-events: none; user-select: none;"></div><input type="range" id="s-ivconsult" min="0" max="300" step="5" value="75" oninput="ss('ivconsult')" class="lockable" style="pointer-events: none;"></div>
+        <div class="ig"><div class="ilr"><span class="il">Insurance / Warranty</span><input class="nf lockable" id="f-ivins" value="75" oninput="sf('ivins')" onblur="cf('ivins')" readonly="" style="pointer-events: none; user-select: none;"></div><input type="range" id="s-ivins" min="0" max="300" step="5" value="75" oninput="ss('ivins')" class="lockable" style="pointer-events: none;"></div>
+        <div class="ig"><div class="ilr"><span class="il">Maintenance Reserve / mo</span><input class="nf lockable" id="f-ivmaint" value="50" oninput="sf('ivmaint')" onblur="cf('ivmaint')" readonly="" style="pointer-events: none; user-select: none;"></div><input type="range" id="s-ivmaint" min="0" max="300" step="5" value="50" oninput="ss('ivmaint')" class="lockable" style="pointer-events: none;"></div>
+        <div class="ig"><div class="ilr"><span class="il">CapEx Reserve / mo</span><input class="nf lockable" id="f-ivcapex" value="50" oninput="sf('ivcapex')" onblur="cf('ivcapex')" readonly="" style="pointer-events: none; user-select: none;"></div><input type="range" id="s-ivcapex" min="0" max="300" step="5" value="50" oninput="ss('ivcapex')" class="lockable" style="pointer-events: none;"></div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Vacancy Reserve</span>
+            <div style="display:flex;align-items:center;gap:3px">
+              <div class="pt"><button class="pb on lockable" id="ivvac-d" onclick="setVacMode('d')" tabindex="-1" style="pointer-events: none;">$</button><button class="pb lockable" id="ivvac-p" onclick="setVacMode('p')" tabindex="-1" style="pointer-events: none;">%</button></div>
+              <input class="nf lockable" id="f-ivvac" value="46" style="width: 90px; pointer-events: none; user-select: none;" oninput="vacChanged()" onblur="vacChanged()" readonly="">
+            </div>
+          </div>
+          <input type="range" id="s-ivvac" min="0" max="500" step="1" value="46" oninput="document.getElementById('f-ivvac').value=Math.round(this.value);vacChanged()" class="lockable" style="pointer-events: none;">
+          <div class="hint" id="h-ivvac">$31/mo — 2.5% of rent</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="ctitle">Monthly Waterfall — Your Return</div>
+        <div class="wf" id="iv-wf"><div class="wr inc"><span>Tenant rent received</span><span class="n" style="color:var(--green)">$1,250</span></div><div class="wr exp"><span>Less: lot rent (Larabee)</span><span class="n" style="color:var(--red)">$-375</span></div><div class="wr exp"><span>Less: note payment</span><span class="n" style="color:var(--red)">$-341</span></div><div class="wr exp"><span>Less: consulting fee</span><span class="n" style="color:var(--red)">$-45</span></div><div class="wr exp"><span>Less: ins / warranty</span><span class="n" style="color:var(--red)">$-42</span></div><div class="wr exp"><span>Less: maintenance reserve</span><span class="n" style="color:var(--red)">$-40</span></div><div class="wr exp"><span>Less: capex reserve</span><span class="n" style="color:var(--red)">$-40</span></div><div class="wr exp"><span>Less: vacancy reserve</span><span class="n" style="color:var(--red)">$-31</span></div><div class="wr net"><span>Your net monthly</span><span class="n" style="color:#fff">$336</span></div></div>
+      </div>
+      <div class="card">
+        <div class="ctitle">Investment Summary</div>
+        <div id="iv-sum">
+    <div class="al"><span>Purchase price</span><span class="n">$95,600</span></div>
+    <div class="al"><span>Down payment</span><span class="n">$33,460</span></div>
+    <div class="al"><span>Note principal</span><span class="n">$62,140</span></div>
+    <div class="al"><span>LTV</span><span class="n">65.0%</span></div>
+    <div class="al"><span>Monthly note payment</span><span class="n">$341</span></div>
+    <div class="al"><span>Total monthly deductions</span><span class="n neg">($914)</span></div>
+    <div class="al tot"><span>Cash-on-cash return</span><span class="n pos">12.0%</span></div>
+  </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAX ADVANTAGE — COMBINED -->
+  <div class="card gap" style="border-left:4px solid var(--gold);margin-top:4px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--rule)">
+      <div class="ctitle" style="margin:0;padding:0;border:none;color:var(--gold)">Your Tax Advantage — §168(k) Bonus Depreciation</div>
+      <div style="font-size:10px;color:var(--light)">100% · 5-yr MACRS · One Big Beautiful Bill (2025)</div>
+    </div>
+
+    <div class="g2" style="gap:28px;align-items:start">
+
+      <!-- LEFT: INVESTOR PROFILE -->
+      <div>
+        <!-- REP STATUS -->
+        <div style="margin-bottom:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);margin-bottom:8px">Your Real Estate Status</div>
+          <div style="display:flex;gap:0;border:2px solid var(--pine);border-radius:6px;overflow:hidden">
+            <button class="mbtn" id="rep-btn-passive" onclick="setRepStatus('passive')" style="font-size:11px">Passive Investor</button>
+            <button class="mbtn on" id="rep-btn-rep" onclick="setRepStatus('rep')" style="font-size:11px">RE Professional</button>
+          </div>
+          <div id="rep-status-note" style="margin-top:7px;font-size:11px;color:var(--mid);line-height:1.5"><strong>Real Estate Professional (§469(c)(7)):</strong> Rental losses are <strong>non-passive</strong> and offset W-2 / ordinary income dollar-for-dollar with no cap. If one spouse qualifies on a joint return, REP status applies to the entire MFJ return — including the high-W2 spouse's income. Prior-year suspended passive losses are also released in full in the first year REP status is achieved. <span style="color:var(--green)">This is the most powerful tax position available to a real estate investor. See the qualification guide below.</span></div>
+        </div>
+
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);margin-bottom:10px">Your Income Profile</div>
+
+        <div class="ig">
+          <div class="ilr"><span class="il">Filing Status</span>
+            <select id="sel-filing" onchange="calcTax()" style="font-family:'DM Sans',sans-serif;font-size:12px;padding:4px 8px;border:1px solid rgba(30,50,35,.25);border-radius:4px;background:var(--bone);color:var(--pine);outline:none">
+              <option value="mfj">Married Filing Jointly</option>
+              <option value="single">Single</option>
+              <option value="hoh">Head of Household</option>
+            </select>
+          </div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">State</span>
+            <select id="sel-state" onchange="calcTax()" style="font-family:'DM Sans',sans-serif;font-size:12px;padding:4px 8px;border:1px solid rgba(30,50,35,.25);border-radius:4px;background:var(--bone);color:var(--pine);outline:none">
+              <option value="NC">NC — 4.50%</option>
+              <option value="NY">NY — 10.90%</option>
+              <option value="NYC">NY + NYC — 14.78%</option>
+              <option value="CA">CA — 13.30%</option>
+              <option value="TX">TX — 0%</option>
+              <option value="FL">FL — 0%</option>
+              <option value="WA">WA — 0%</option>
+              <option value="NJ">NJ — 10.75%</option>
+              <option value="CT">CT — 6.99%</option>
+              <option value="MA">MA — 5.00%</option>
+              <option value="GA">GA — 5.49%</option>
+              <option value="VA">VA — 5.75%</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="ig" id="ig-custom-state" style="display:none">
+          <div class="ilr"><span class="il">Custom State Rate (%)</span><input class="nf" id="f-custom-state" value="5.0" oninput="calcTax()" onblur="calcTax()"></div>
+          <input type="range" id="s-custom-state" min="0" max="15" step="0.1" value="5" oninput="document.getElementById('f-custom-state').value=parseFloat(this.value).toFixed(1);calcTax()">
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">W-2 / Ordinary Income</span><input class="nf" id="f-w2" value="750000" oninput="calcTax()" onblur="calcTax()"></div>
+          <input type="range" id="s-w2" min="50000" max="2000000" step="10000" value="750000" oninput="document.getElementById('f-w2').value=Math.round(this.value);calcTax()">
+          <div class="hint" id="h-w2">35% federal bracket (Married Filing Jointly)</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Other Deductions</span><input class="nf" id="f-othded" value="29200" oninput="calcTax()" onblur="calcTax()"></div>
+          <input type="range" id="s-othded" min="0" max="200000" step="1000" value="29200" oninput="document.getElementById('f-othded').value=Math.round(this.value);calcTax()">
+          <div class="hint">Standard deduction MFJ 2024: $29,200</div>
+        </div>
+        <div class="ig">
+          <div class="ilr"><span class="il">Homes to Purchase</span><input class="nf" id="f-tax-homes" value="1" oninput="calcTax()" onblur="calcTax()"></div>
+          <input type="range" id="s-tax-homes" min="1" max="20" step="1" value="1" oninput="document.getElementById('f-tax-homes').value=Math.round(this.value);calcTax()">
+          <div class="hint">Each home contributes 100% of its price as a deduction</div>
+        </div>
+        <div class="ig" id="ig-carryover" style="display: block;">
+          <div class="ilr"><span class="il">Prior Passive Loss Carryover</span><input class="nf" id="f-carryover" value="0" oninput="calcTax()" onblur="calcTax()"></div>
+          <input type="range" id="s-carryover" min="0" max="500000" step="5000" value="0" oninput="document.getElementById('f-carryover').value=Math.round(this.value);calcTax()">
+          <div class="hint">Released in full when REP status is first achieved</div>
+        </div>
+
+        <!-- Hidden fields needed by calcDep() -->
+        <input type="hidden" id="f-dep-price" value="95600">
+        <input type="hidden" id="f-dep-pct" value="100">
+        <input type="hidden" id="f-dep-rate" value="35">
+        <input type="hidden" id="f-dep-homes" value="1">
+        <div id="tax-law-note" style="display:none"></div>
+      </div>
+
+      <!-- RIGHT: OUTPUT -->
+      <div>
+        <!-- KEY NUMBERS — 2×2 grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px" id="tax-kpis"><div style="background:rgba(31,54,40,.06);border-radius:5px;padding:10px 12px">
+    <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--pine)">$750,000</div>
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--mid);margin-top:2px">W-2 Income</div>
+  </div><div style="background:rgba(31,54,40,.06);border-radius:5px;padding:10px 12px">
+    <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--pine)">35%</div>
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--mid);margin-top:2px">Federal Bracket</div>
+  </div><div style="background:rgba(31,54,40,.06);border-radius:5px;padding:10px 12px">
+    <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--pine)">14.8%</div>
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--mid);margin-top:2px">State Rate</div>
+  </div><div style="background:rgba(31,54,40,.06);border-radius:5px;padding:10px 12px">
+    <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--red)">$299,564</div>
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--mid);margin-top:2px">Tax Bill (before)</div>
+  </div><div style="background:rgba(31,54,40,.06);border-radius:5px;padding:10px 12px">
+    <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--green)">$251,974</div>
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--mid);margin-top:2px">Tax Bill (after)</div>
+  </div><div style="background:rgba(31,54,40,.06);border-radius:5px;padding:10px 12px">
+    <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--green)">$47,590</div>
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--mid);margin-top:2px">Total Reduction</div>
+  </div></div>
+
+        <!-- REFUND / BENEFIT HERO -->
+        <div id="tax-hero-box" style="border-radius: 8px; padding: 18px 20px; margin-bottom: 14px; background: rgba(45, 107, 69, 0.08); border: 2px solid var(--green);">
+          <div style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; opacity: 0.8; color: var(--green);" id="tax-hero-label">Tax Reduction — RE Professional (§469(c)(7))</div>
+          <div style="font-family: &quot;DM Mono&quot;, monospace; font-size: 34px; font-weight: 500; line-height: 1; color: var(--green);" id="tax-hero-val">$47,590</div>
+          <div style="font-size: 12px; margin-top: 6px; opacity: 0.75; line-height: 1.5; color: var(--mid);" id="tax-hero-sub">$33,460 federal + $14,130 state — direct reduction in your 2026 tax bill. RE Professional status — full $95,600 bonus deduction offsets W-2 income with no cap. Applies to entire MFJ return if either spouse qualifies.</div>
+        </div>
+
+        <!-- TRUE RETURN -->
+        <div id="true-coc-out">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      <div style="background:rgba(31,54,40,.06);border-radius:5px;padding:11px 13px">
+        <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--pine)">$336<span style="font-size:10px;font-weight:400;color:var(--light)">/mo net</span></div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-top:2px">Monthly Cash Income (pre-tax)</div>
+      </div>
+      <div style="background:rgba(31,54,40,.06);border-radius:5px;padding:11px 13px">
+        <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--green)">$1,131</div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-top:2px">Mortgage Interest Write-off Value</div>
+      </div>
+      <div style="background:rgba(31,54,40,.06);border-radius:5px;padding:11px 13px">
+        <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:var(--green)">$47,590</div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-top:2px">Tax Refund / Bill Reduction</div>
+      </div>
+      <div style="background:rgba(45,107,69,.15);border:2px solid var(--green);border-radius:5px;padding:11px 13px">
+        <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--green)">157.7%</div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-top:2px">True Year-1 Return</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--mid);line-height:1.5;padding:8px 10px;background:var(--bone);border-radius:4px;margin-top:4px">RE Professional status — full $95,600 bonus deduction offsets W-2 income with no cap. Applies to entire MFJ return if either spouse qualifies.</div>
+  </div>
+
+        <!-- dep output elements hidden — still needed by calcDep() -->
+        <div id="dep-out-single" style="display:none">
+    <div class="al"><span>Full depreciable basis (100% of price)</span><span class="n">$95,600</span></div>
+    <div class="al"><span>Bonus deduction (100% of basis)</span><span class="n pos">$95,600</span></div>
+    <div class="al"><span>Remaining basis → 5-yr MACRS</span><span class="n">$0</span></div>
+    <div class="al"><span>Yr-1 MACRS on remaining (20%)</span><span class="n pos">$0</span></div>
+    <div class="al tot"><span>Total Year-1 deduction</span><span class="n pos">$95,600</span></div>
+    <div class="al"><span>Federal tax shield (35%)</span><span class="n pos">$33,460</span></div>
+    <div class="al"><span style="color:var(--mid)">Investor down payment</span><span class="n" style="color:var(--mid)">$33,460</span></div>
+    <div class="al"><span style="color:var(--mid)">Effective net cost after shield</span><span class="n pos" style="color:var(--green)">($0) NET POSITIVE</span></div>
+    <div class="al tot" style="background:rgba(45,107,69,.08);border-radius:4px;padding:8px 4px">
+      <span>Yr-1 effective return (cash + shield / down)</span>
+      <span class="n" style="color:var(--green)"><strong>∞ — Shield exceeds down payment</strong></span>
+    </div>
+    <div class="inf-banner">
+        <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#7fff9a;font-weight:700;margin-bottom:8px">🏆 Infinite Return — The IRS Pays You to Own This Home</div>
+        <div style="font-size:14px;font-weight:600;line-height:1.6;color:white">Your federal tax shield of <strong style="color:#7fff9a">$33,460</strong> exceeds your down payment of <strong style="color:#ffd700">$33,460</strong>.<br>
+        Effective net cost in Year 1: <strong style="color:#7fff9a">($0) — you come out ahead before collecting a single rent check.</strong></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:8px">Assumes REP status or STR material participation. State tax benefit adds further upside. §1245 recapture applies at sale.</div>
+      </div>
+  </div>
+        <div id="dep-out-portfolio" style="display:none">
+    <div class="al"><span>Total bonus deduction (1 homes)</span><span class="n pos">$95,600</span></div>
+    <div class="al tot"><span>Total Year-1 tax shield</span><span class="n pos">$33,460</span></div>
+    <div class="al"><span>Avg shield per home</span><span class="n">$33,460</span></div>
+  </div>
+        <span id="dep-home-count" style="display:none">1</span>
+        <table id="dep-macrs-tbl" style="display:none"><tbody><tr><th>Year</th><th style="text-align:right">MACRS Rate</th><th style="text-align:right">Deduction</th><th style="text-align:right">Tax Shield</th><th style="text-align:right">Cumul. Shield</th></tr><tr style="background:rgba(45,107,69,.06)"><td><strong>Yr 1 — Bonus</strong></td><td class="n">100%</td><td class="n pos"><strong>$95,600</strong></td><td class="n pos"><strong>$33,460</strong></td><td class="n"></td></tr><tr><td>Yr 1 (remaining)</td><td class="n">20.00%</td><td class="n">$0</td><td class="n">$0</td><td class="n">$33,460</td></tr><tr><td>Yr 2</td><td class="n">32.00%</td><td class="n">$0</td><td class="n">$0</td><td class="n">$33,460</td></tr><tr><td>Yr 3</td><td class="n">19.20%</td><td class="n">$0</td><td class="n">$0</td><td class="n">$33,460</td></tr><tr><td>Yr 4</td><td class="n">11.52%</td><td class="n">$0</td><td class="n">$0</td><td class="n">$33,460</td></tr><tr><td>Yr 5</td><td class="n">11.52%</td><td class="n">$0</td><td class="n">$0</td><td class="n">$33,460</td></tr><tr><td>Yr 6</td><td class="n">5.76%</td><td class="n">$0</td><td class="n">$0</td><td class="n">$33,460</td></tr></tbody></table>
+        <!-- also need tax-profile-tiles and tax-ba-tbl for calcTax() -->
+        <div id="tax-profile-tiles" style="display:none"></div>
+        <table id="tax-ba-tbl" style="display:none">
+    <tbody><tr><th>Line Item</th><th style="text-align:right">Before Investment</th><th style="text-align:right">After Investment</th><th style="text-align:right">Δ Change</th></tr>
+    <tr><td>W-2 / Ordinary Income</td><td class="n">$750,000</td><td class="n">$750,000</td><td class="n">—</td></tr>
+    <tr><td>Standard / Itemized Deductions</td><td class="n neg">($29,200)</td><td class="n neg">($29,200)</td><td class="n">—</td></tr>
+    <tr><td>Bonus Depreciation Deduction (1 home)</td><td class="n">$0</td><td class="n neg">($95,600)</td><td class="n pos">-$95,600</td></tr>
+    <tr class="tot"><td>Federal Taxable Income</td><td class="n">$720,800</td><td class="n">$625,200</td><td class="n pos">-$95,600</td></tr>
+    <tr><td>Federal Income Tax</td><td class="n neg">$193,030</td><td class="n pos">$159,570</td><td class="n pos">-$33,460</td></tr>
+    <tr><td>State Income Tax (New York (+ NYC))</td><td class="n neg">$106,534</td><td class="n pos">$92,405</td><td class="n pos">-$14,130</td></tr>
+    <tr class="tot"><td>Total Tax Bill</td><td class="n neg">$299,564</td><td class="n pos">$251,974</td><td class="n pos">-$47,590</td></tr>
+    
+  </tbody></table>
+
+        <div style="margin-top:14px;font-size:10px;color:var(--light);line-height:1.6;padding:9px 12px;background:var(--bone);border-radius:5px">
+          §168(k) 100% bonus depreciation · 5-yr MACRS personal property · One Big Beautiful Bill (2025). Federal brackets per IRS 2024 tables. State rates are top marginal. Does not account for AMT, NIIT, or state conformity variations. §1245 recapture applies on sale. Consult your CPA.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REP QUALIFICATION GUIDE + STR LOOPHOLE -->
+  <div class="card gap" style="border-left:4px solid var(--green);margin-top:4px">
+    <div class="ctitle" style="color:var(--green)">Real Estate Professional Status — IRS Qualification Guide &amp; Strategies</div>
+
+    <div style="gap:20px;align-items:start">
+
+      <!-- REP TESTS -->
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--pine);margin-bottom:12px">The Three Requirements — All Must Be Met (§469(c)(7))</div>
+
+        <div style="background:rgba(45,107,69,.06);border:1px solid var(--green);border-radius:7px;padding:14px 16px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <div style="background:var(--green);color:white;font-family:'DM Mono',monospace;font-size:13px;font-weight:700;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+            <div style="font-size:12px;font-weight:700;color:var(--green)">750-Hour Requirement</div>
+          </div>
+          <div style="font-size:12px;color:var(--ink);line-height:1.7">You must spend <strong>more than 750 hours</strong> during the tax year performing services in real property trades or businesses in which you materially participate. This is approximately 14–15 hours per week. Hours must be documented contemporaneously — a calendar log, time-tracking app, or spreadsheet maintained throughout the year. Year-end reconstruction is a major audit risk and is routinely rejected by IRS examiners.</div>
+        </div>
+
+        <div style="background:rgba(45,107,69,.06);border:1px solid var(--green);border-radius:7px;padding:14px 16px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <div style="background:var(--green);color:white;font-family:'DM Mono',monospace;font-size:13px;font-weight:700;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+            <div style="font-size:12px;font-weight:700;color:var(--green)">The 50% Test</div>
+          </div>
+          <div style="font-size:12px;color:var(--ink);line-height:1.7">More than <strong>50% of your total personal services</strong> for the year must be in real property trades or businesses in which you materially participate. If a W-2 spouse works 2,000 hours, the managing spouse must log more than 1,000 hours in real estate to clear 50%. This is why the two-spouse structure is so common: one spouse earns W-2 income, the other manages the real estate business full-time and qualifies — and on a joint return, <strong>REP status applies to the entire MFJ return</strong>, offsetting the W-2 spouse's income with no cap.</div>
+        </div>
+
+        <div style="background:rgba(45,107,69,.06);border:1px solid var(--green);border-radius:7px;padding:14px 16px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <div style="background:var(--green);color:white;font-family:'DM Mono',monospace;font-size:13px;font-weight:700;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+            <div style="font-size:12px;font-weight:700;color:var(--green)">Material Participation — Each Activity</div>
+          </div>
+          <div style="font-size:12px;color:var(--ink);line-height:1.7">You must <strong>materially participate</strong> in each rental activity. The IRS provides seven tests — the most commonly used: (a) 500+ hours in the activity, (b) substantially all participation is by you, or (c) 100+ hours and no other person participates more than you. <strong>Critical:</strong> make a <em>grouping election</em> under Reg. §1.469-9(g) to treat all rental properties as a single activity — without it, you must satisfy material participation on each property individually, which is dramatically harder to prove across a growing portfolio.</div>
+        </div>
+
+        <div style="background:var(--bone);border-radius:6px;padding:12px 14px">
+          <div style="font-size:11px;font-weight:700;color:var(--pine);margin-bottom:7px">Documentation Checklist</div>
+          <div style="font-size:11px;color:var(--mid);line-height:1.8">
+            ✓ Daily time log: date, hours, specific activity description<br>
+            ✓ Calendar entries, emails, texts showing active management decisions<br>
+            ✓ Tenant communications, lease signings, inspection records<br>
+            ✓ Contractor coordination, repair authorizations, vendor invoices<br>
+            ✓ Mileage log for all property visits<br>
+            ✓ Grouping election statement attached to Form 1040 each year<br>
+            ✓ If spouse qualifies: separate hour log showing their personal service hours across all occupations to establish the 50% test
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div style="margin-top:4px;background:var(--bone);border:1px solid var(--rule);border-radius:8px;padding:20px 24px">
+    <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin-bottom:10px">Important Disclosures — Please Read</div>
+    <div style="font-size:11px;color:var(--mid);line-height:1.8">
+      <strong>Not Financial, Tax, or Legal Advice.</strong> All information, projections, return estimates, tax calculations, and depreciation figures presented in this tool are for <em>illustrative and educational purposes only</em>. Nothing herein constitutes financial advice, investment advice, tax advice, or legal advice. Larabee Homes LLC and its principals are not registered investment advisors, broker-dealers, tax professionals, or attorneys.<br><br>
+      <strong>No Guarantee of Returns.</strong> Projected cash-on-cash returns, tax savings, and Year-1 effective returns are estimates based on assumed inputs and current law. Actual results will vary based on occupancy, market conditions, tenant performance, financing terms, applicable tax law, and individual circumstances. Past performance of any investment does not guarantee future results.<br><br>
+      <strong>Tax Calculations Are Estimates Only.</strong> Federal and state tax figures shown are simplified estimates. Tax treatment depends on your individual filing status, income, passive activity status, at-risk rules, alternative minimum tax (AMT), net investment income tax (NIIT), state conformity to federal law, and other factors. The bonus depreciation analysis assumes 5-year MACRS classification per an independent cost segregation study — this classification should be confirmed by your own tax advisor prior to filing. §1245 recapture applies upon sale of any depreciated property.<br><br>
+      <strong>RE Professional Status.</strong> Qualification as a Real Estate Professional under §469(c)(7) requires meeting specific IRS tests. Failure to properly document hours or meet the statutory requirements may result in disallowance of deductions and potential penalties. Consult a qualified CPA or tax attorney before claiming RE Professional status.<br><br>
+      <strong>Consult Your Own Advisors.</strong> Before making any investment decision, you should consult with your own independent financial advisor, tax professional, and legal counsel. This material has been prepared by Larabee Homes LLC solely for informational purposes and does not constitute an offer to sell or a solicitation of an offer to buy any security or investment product.
+    </div>
+  </div>
+
+
+<script>
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+let finMode    = 'seller';  // seller | firstlien | outside
+let chattelMode = 'self';   // self | 21st | chattel
+
+// Shared investor calc results — populated by calcInv(), read by calcTax()
+let _inv = { netMonthly:0, notePmt:0, principal:0, rate:0, down:0, price:0 };
+
+// ── VACANCY MODE ──
+let vacMode = 'd'; // 'd' = dollar, 'p' = percent
+
+function setVacMode(mode) {
+  vacMode = mode;
+  const db = document.getElementById('ivvac-d');
+  const pb = document.getElementById('ivvac-p');
+  const f  = document.getElementById('f-ivvac');
+  const sl = document.getElementById('s-ivvac');
+  if(!f) return;
+  const cur = parseFloat(f.value) || 0;
+  const rent = fv('f-ivrent') || 925;
+  if(mode === 'd') {
+    db.classList.add('on'); pb.classList.remove('on');
+    // convert % → $
+    const dollars = Math.round(cur / 100 * rent);
+    f.value = dollars;
+    sl.min = 0; sl.max = 500; sl.step = 1; sl.value = dollars;
+  } else {
+    pb.classList.add('on'); db.classList.remove('on');
+    // convert $ → %
+    const pctVal = rent > 0 ? (cur / rent * 100).toFixed(1) : '0.0';
+    f.value = pctVal;
+    sl.min = 0; sl.max = 30; sl.step = 0.5; sl.value = pctVal;
+  }
+  vacChanged();
+}
+
+function getVacDollars() {
+  const v = parseFloat(document.getElementById('f-ivvac')?.value) || 0;
+  const rent = fv('f-ivrent') || 925;
+  return vacMode === 'p' ? v / 100 * rent : v;
+}
+
+function vacChanged() {
+  const f  = document.getElementById('f-ivvac');
+  const sl = document.getElementById('s-ivvac');
+  const h  = document.getElementById('h-ivvac');
+  if(!f) return;
+  const raw = parseFloat(f.value) || 0;
+  if(sl) sl.value = raw;
+  const rent = fv('f-ivrent') || 925;
+  const dollars = vacMode === 'p' ? raw / 100 * rent : raw;
+  const pctOfRent = rent > 0 ? (dollars / rent * 100).toFixed(1) : '0.0';
+  if(h) h.textContent = vacMode === 'p'
+    ? `${pctOfRent}% of rent = ${fmt(dollars)}/mo`
+    : `${fmt(dollars)}/mo — ${pctOfRent}% of ${fmt(rent)} rent`;
+  calc(); calcOffers(); calcInv();
+}
+
+const modes = {
+  bank:'d', seller:'d', flb:'d', ocb:'d', oceq:'d',
+  invd:'d', o1b:'d', o1s:'d', o2b:'d',
+  ivd:'d',
+};
+
+// ════════════════════════════════════════════
+// UTILITIES
+// ════════════════════════════════════════════
+const fmt  = n => '$' + Math.round(n).toLocaleString();
+const fmtK = n => n >= 1000 ? '$' + (n/1000).toFixed(0) + 'K' : fmt(n);
+const pct  = n => (n*100).toFixed(1) + '%';
+const fv   = id => parseFloat(document.getElementById(id)?.value) || 0;
+const PMT  = (r,n,pv) => { if(!r) return pv/n; const mr=r/12; return pv*mr*Math.pow(1+mr,n)/(Math.pow(1+mr,n)-1); };
+
+function wfHTML(rows) {
+  return rows.map(r => {
+    const cls = r.type==='net' ? 'net' : r.val<0 ? 'exp' : 'inc';
+    const col = r.type==='net' ? '#fff' : r.val<0 ? 'var(--red)' : 'var(--green)';
+    return `<div class="wr ${cls}"><span>${r.label}</span><span class="n" style="color:${col}">${fmt(r.val)}</span></div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════
+// % / $ TOGGLE
+// ════════════════════════════════════════════
+function refP(key) {
+  if (['bank','seller','flb','ocb','oceq'].includes(key)) return gv('price');
+  if (['o1b','o1s'].includes(key)) return gv('o1p');
+  if (key==='o2b') return gv('o2p');
+  if (key==='invd') return 100000; // based on home sale price
+  if (key==='ivd')  return gv('ivp');
+  return 1;
+}
+
+function sm(key, mode) {
+  modes[key] = mode;
+  const d = document.getElementById(key+'-d'), p = document.getElementById(key+'-p');
+  if(!d||!p) return;
+  if(mode==='d'){d.classList.add('on');p.classList.remove('on')}
+  else{p.classList.add('on');d.classList.remove('on')}
+  const f = document.getElementById('f-'+key);
+  if(!f) return;
+  const raw = parseFloat(f.value.replace(/[^0-9.\-]/g,''))||0;
+  const ref = refP(key);
+  if(mode==='p') f.value = ref>0 ? (raw/ref*100).toFixed(1) : '0.0';
+  else f.value = Math.round(raw/100*ref);
+  const sl = document.getElementById('s-'+key);
+  if(sl){ if(mode==='p'){sl.min=0;sl.max=100;sl.step=1} else restoreSlider(key); sl.value=parseFloat(f.value)||0; }
+  calc(); calcOffers(); calcInv();
+}
+
+const sliderRanges = {
+  bank:[300000,2500000,10000], seller:[0,1000000,10000], flb:[300000,2500000,10000],
+  ocb:[300000,2500000,10000], oceq:[0,1500000,10000], invd:[5000,120000,1000],
+  o1b:[300000,2200000,10000], o1s:[0,900000,10000], o2b:[300000,2200000,10000],
+  ivd:[5000,200000,1000],
+};
+function restoreSlider(key) {
+  const sl = document.getElementById('s-'+key); if(!sl) return;
+  const r = sliderRanges[key]; if(!r) return;
+  sl.min=r[0]; sl.max=r[1]; sl.step=r[2];
+}
+
+function gv(key) { // get resolved dollar value
+  const f = document.getElementById('f-'+key); if(!f) return 0;
+  const raw = parseFloat(f.value.replace(/[^0-9.\-]/g,''))||0;
+  if(modes[key]==='p') return raw/100 * refP(key);
+  return raw;
+}
+
+// ════════════════════════════════════════════
+// SYNC SLIDER ↔ FIELD
+// ════════════════════════════════════════════
+function ss(key) { // slider → field
+  const sl=document.getElementById('s-'+key), f=document.getElementById('f-'+key);
+  if(!sl||!f) return;
+  f.value = modes[key]==='p' ? parseFloat(sl.value).toFixed(1) : Math.round(sl.value);
+  calc(); calcOffers(); calcInv();
+}
+function sf(key) { // field → slider (live)
+  const f=document.getElementById('f-'+key), sl=document.getElementById('s-'+key);
+  if(!f) return;
+  if(sl) sl.value = parseFloat(f.value.replace(/[^0-9.\-]/g,''))||0;
+  calc(); calcOffers(); calcInv();
+}
+function cf(key) { // cleanup on blur
+  const f=document.getElementById('f-'+key); if(!f) return;
+  const raw = parseFloat(f.value.replace(/[^0-9.\-]/g,''))||0;
+  const pctKeys = ['srate','brate','bterm','flrate','flterm','ocpref','ocrate','octerm',
+                   'c21rate','c21term','chrate','chterm','o1sr','o1st','o1br','o2br','o2bt',
+                   'o3om','o3pad','ivrate','ivterm','homes'];
+  if(modes[key]==='p') f.value = raw.toFixed(1);
+  else if(pctKeys.includes(key)) f.value = raw % 1 === 0 ? raw : raw.toFixed(2);
+  else f.value = Math.round(raw);
+  const sl=document.getElementById('s-'+key);
+  if(sl) sl.value = parseFloat(f.value)||0;
+  calc(); calcOffers(); calcInv();
+}
+
+// ════════════════════════════════════════════
+// FINANCING MODE
+// ════════════════════════════════════════════
+function setFinMode(mode) {
+  finMode = mode;
+  ['seller','firstlien','outside'].forEach(m => {
+    document.getElementById('mb-'+m).classList.toggle('on', m===mode);
+    document.getElementById('ms-'+m).classList.toggle('show', m===mode);
+  });
+  calc(); calcOffers(); calcInv();
+}
+
+// ════════════════════════════════════════════
+// CHATTEL MODE
+// ════════════════════════════════════════════
+function setChattel(mode) {
+  chattelMode = mode;
+  ['self','21st','chattel'].forEach(m => {
+    document.getElementById('ch-'+m).classList.toggle('on', m===mode);
+    document.getElementById('cs-'+m).style.display = m===mode ? 'block' : 'none';
+  });
+  const hints = {'self':'Full capex — home + rehab out of pocket','21st':'21st CASH program finances home; you fund rehab only','chattel':'Chattel lender finances home; you fund rehab only'};
+  document.getElementById('capex-hint').textContent = hints[mode];
+  calc();
+}
+
+// ════════════════════════════════════════════
+// ACQUISITION DEBT SERVICE (mode-aware)
+// ════════════════════════════════════════════
+function getAcq() {
+  const price = gv('price');
+  if(finMode==='seller') {
+    const bank=gv('bank'), sel=gv('seller'), brate=fv('f-brate')/100, bterm=fv('f-bterm')||25, srate=fv('f-srate')/100;
+    const bpmt=PMT(brate,bterm*12,bank), sio=sel*(srate/12);
+    return {price,bank,sel,bpmt,sio,ds:bpmt+sio,equity:price-bank-sel,ocPref:0,ocEq:0};
+  }
+  if(finMode==='firstlien') {
+    const bank=gv('flb'), brate=fv('f-flrate')/100, bterm=fv('f-flterm')||25;
+    const bpmt=PMT(brate,bterm*12,bank);
+    return {price,bank,sel:0,bpmt,sio:0,ds:bpmt,equity:price-bank,ocPref:0,ocEq:0};
+  }
+  if(finMode==='outside') {
+    const bank=gv('ocb'), ocEq=gv('oceq'), brate=fv('f-ocrate')/100, bterm=fv('f-octerm')||25, pref=fv('f-ocpref')/100;
+    const bpmt=PMT(brate,bterm*12,bank), ocPref=ocEq*(pref/12);
+    return {price,bank,sel:0,bpmt,sio:0,ds:bpmt+ocPref,equity:price-bank-ocEq,ocPref,ocEq};
+  }
+  return {price,bank:0,sel:0,bpmt:0,sio:0,ds:0,equity:price,ocPref:0,ocEq:0};
+}
+
+// ════════════════════════════════════════════
+// CHATTEL PAYMENT
+// ════════════════════════════════════════════
+function getChattelPmt() {
+  if(chattelMode==='21st') return PMT(fv('f-c21rate')/100, fv('f-c21term')*12, fv('f-c21amt'));
+  if(chattelMode==='chattel') return PMT(fv('f-chrate')/100, fv('f-chterm')*12, fv('f-chamt'));
+  return 0;
+}
+function getEffCapex() {
+  const full = fv('f-capex');
+  if(chattelMode==='21st') return Math.max(0, full - fv('f-c21amt'));
+  if(chattelMode==='chattel') return Math.max(0, full - fv('f-chamt'));
+  return full;
+}
+
+// ════════════════════════════════════════════
+// PARK OPEX
+// ════════════════════════════════════════════
+function getOpEx() {
+  return fv('f-ptax') + fv('f-pins') + fv('f-util') + fv('f-mgmt') + fv('f-maint') + fv('f-vac');
+}
+
+// ════════════════════════════════════════════
+// OPERATOR CALC
+// ════════════════════════════════════════════
+function calc() {
+  const acq      = getAcq();
+  const chatPmt  = getChattelPmt();
+  const effCapex = getEffCapex();
+  const opex     = getOpEx();
+  const homes    = fv('f-homes') || 1;
+  const invd     = gv('invd');
+  const lotrent  = fv('f-lotrent');
+  const notepmt  = fv('f-notepmt');
+  const consult  = fv('f-consult');
+  const homins   = fv('f-homins');  // pass-through insurance (flows through as income to you from investor)
+
+  // Per home gross income to you
+  const perHomeGross = lotrent + notepmt + consult + homins;
+  // Chattel payment is your cost (you borrow to fund homes)
+  const perHomeNet   = perHomeGross - chatPmt;
+
+  const totalIncome = perHomeNet * homes;
+  const totalOpEx   = opex;
+  const totalDS     = acq.ds;
+  const ncf         = totalIncome - totalDS - totalOpEx;
+  const dscr        = totalDS > 0 ? totalIncome / totalDS : 99;
+  const annualYield = effCapex > 0 ? (perHomeNet * 12) / effCapex : 0;
+  const totalDowns  = invd * homes;
+  const totalCapex  = effCapex * homes;
+  const capGap      = totalDowns - totalCapex;
+
+  // Update hints
+  const price = acq.price;
+  if(price>0) {
+    const bval = finMode==='seller' ? gv('bank') : finMode==='firstlien' ? gv('flb') : gv('ocb');
+    const sval = finMode==='seller' ? gv('seller') : 0;
+    const hb = document.getElementById('h-bank'), hs = document.getElementById('h-seller');
+    if(hb) hb.textContent = pct(bval/price) + ' of purchase price';
+    if(hs) hs.textContent = pct(sval/price) + ' of purchase price';
+    const hflb = document.getElementById('h-flb'); if(hflb) hflb.textContent = pct(gv('flb')/price) + ' of purchase price';
+    const hocb = document.getElementById('h-ocb'); if(hocb) hocb.textContent = pct(gv('ocb')/price) + ' of purchase price';
+    const hocq = document.getElementById('h-oceq'); if(hocq) hocq.textContent = pct(gv('oceq')/price) + ' of purchase price';
+  }
+  const hinvd = document.getElementById('h-invd'); if(hinvd) hinvd.textContent = pct(invd/100000) + ' of $100K home sale';
+
+  // Chattel summary boxes
+  if(chattelMode==='21st') {
+    const pmt21 = getChattelPmt();
+    document.getElementById('sum-21st').textContent = `Payment to 21st: ${fmt(pmt21)}/mo | Net spread after chattel: ${fmt(perHomeGross - pmt21)}/mo per home`;
+  }
+  if(chattelMode==='chattel') {
+    const pmtCh = getChattelPmt();
+    document.getElementById('sum-chattel').textContent = `Payment to chattel lender: ${fmt(pmtCh)}/mo | Net to you: ${fmt(perHomeGross - pmtCh)}/mo per home`;
+  }
+
+  // METRIC TILES
+  const setTile = (id, val, sub, cls) => {
+    const t = document.getElementById(id);
+    t.querySelector('.mval').textContent = val;
+    const s = t.querySelector('.msub'); if(s) s.textContent = sub||'';
+    t.className = 'mtile ' + (cls||'');
+  };
+  setTile('m-ncf',   fmt(ncf),   fmt(totalIncome)+'/mo income', ncf>0?'good':ncf>-1000?'warn':'bad');
+  setTile('m-annual',fmtK(totalIncome*12), homes+' pads × '+fmt(perHomeNet));
+  setTile('m-dscr',  dscr.toFixed(2)+'×', 'Target ≥ 1.25×', dscr>=1.25?'good':dscr>=1.0?'warn':'bad');
+  setTile('m-yield', pct(annualYield), 'Per home annualized', annualYield>=0.14?'good':annualYield>=0.10?'warn':'bad');
+  setTile('m-equity',fmt(acq.equity), finMode==='outside'?'LP funds gap':'Cash to close');
+
+  // Per-home waterfall
+  const wfRows = [
+    {label:'Lot Rent',               val: lotrent},
+    {label:'Note Payment',           val: notepmt},
+    {label:'Consulting Fee',         val: consult},
+    {label:'Ins/Warranty (pass-thru)',val: homins},
+  ];
+  if(chatPmt>0) wfRows.push({label:'Less: Chattel/21st Pmt', val: -chatPmt});
+  wfRows.push({label:'Net to You / mo', val: perHomeNet, type:'net'});
+  document.getElementById('wf-home').innerHTML = wfHTML(wfRows);
+
+  // Capital stack
+  let stackHTML = `
+    <div class="al"><span>Purchase Price</span><span class="n">${fmt(acq.price)}</span></div>
+    <div class="al"><span>Bank First Mortgage</span><span class="n neg">(${fmt(acq.bank)})</span></div>`;
+  if(finMode==='seller') stackHTML += `<div class="al"><span>Seller Second Note</span><span class="n neg">(${fmt(acq.sel)})</span></div>`;
+  if(finMode==='outside') stackHTML += `<div class="al"><span>Outside Capital (LP/JV)</span><span class="n neg">(${fmt(acq.ocEq)})</span></div>`;
+  stackHTML += `
+    <div class="al tot"><span>Equity Required</span><span class="n">${fmt(acq.equity)}</span></div>
+    <div class="al"><span style="font-size:11px;color:var(--mid)">Bank P+I / mo</span><span class="n" style="font-family:'DM Mono',monospace">${fmt(acq.bpmt)}</span></div>`;
+  if(finMode==='seller') stackHTML += `<div class="al"><span style="font-size:11px;color:var(--mid)">Seller IO / mo</span><span class="n" style="font-family:'DM Mono',monospace">${fmt(acq.sio)}</span></div>`;
+  if(finMode==='outside') stackHTML += `<div class="al"><span style="font-size:11px;color:var(--mid)">LP Preferred / mo</span><span class="n" style="font-family:'DM Mono',monospace">${fmt(acq.ocPref)}</span></div>`;
+  stackHTML += `
+    <div class="al"><span style="font-size:11px;color:var(--mid)">Park OpEx / mo</span><span class="n" style="font-family:'DM Mono',monospace">${fmt(opex)}</span></div>
+    <div class="al tot"><span>Total Monthly Obligations</span><span class="n">${fmt(totalDS + opex)}</span></div>`;
+  document.getElementById('acq-stack').innerHTML = stackHTML;
+
+  // Scale table
+  document.getElementById('scale-tbl').innerHTML = `
+    <tr><th>Metric</th><th style="text-align:right">Value</th></tr>
+    <tr><td>Homes placed</td><td class="n">${homes}</td></tr>
+    <tr><td>Investor downs collected</td><td class="n pos">${fmt(totalDowns)}</td></tr>
+    <tr><td>Effective capex deployed</td><td class="n neg">(${fmt(totalCapex)})</td></tr>
+    <tr class="tot"><td>Net cash at close</td><td class="n ${capGap>=0?'pos':'neg'}">${fmt(capGap)}</td></tr>
+    <tr><td>Monthly program income</td><td class="n">${fmt(totalIncome)}</td></tr>
+    <tr><td>Park OpEx / mo</td><td class="n neg">(${fmt(opex)})</td></tr>
+    <tr><td>Debt service / mo</td><td class="n neg">(${fmt(totalDS)})</td></tr>
+    <tr class="tot"><td>Net cash flow / mo</td><td class="n ${ncf>=0?'pos':'neg'}">${fmt(ncf)}</td></tr>
+  `;
+
+  // DSCR table
+  document.getElementById('dscr-tbl').innerHTML = `
+    <tr><th>Metric</th><th style="text-align:right">Value</th></tr>
+    <tr><td>Program income / mo</td><td class="n pos">${fmt(totalIncome)}</td></tr>
+    <tr><td>Debt service / mo</td><td class="n neg">(${fmt(totalDS)})</td></tr>
+    <tr class="tot"><td>DSCR</td><td class="n ${dscr>=1.25?'pos':dscr>=1?'':'neg'}">${dscr.toFixed(2)}×</td></tr>
+    <tr><td>Park OpEx / mo</td><td class="n neg">(${fmt(opex)})</td></tr>
+    <tr class="tot"><td>Net Cash Flow / mo</td><td class="n ${ncf>=0?'pos':'neg'}">${fmt(ncf)}</td></tr>
+  `;
+
+  // Verdict
+  const checks = [
+    {l:`DSCR ${dscr.toFixed(2)}× (≥1.25)`,   ok:dscr>=1.25,       meh:dscr>=1.0&&dscr<1.25},
+    {l:`NCF ${fmt(ncf)}/mo`,                   ok:ncf>0,            meh:false},
+    {l:`Yield ${pct(annualYield)} (≥14%)`,    ok:annualYield>=0.14, meh:annualYield>=0.10},
+    {l:`Cap gap ${capGap>=0?'closed':fmt(Math.abs(capGap))+' short'}`, ok:capGap>=0, meh:capGap<0&&capGap>-50000},
+  ];
+  const passes = checks.filter(c=>c.ok).length;
+  document.getElementById('verdict').className = 'verdict ' + (passes===4?'pass':passes>=2?'warn':'fail');
+  document.getElementById('vt').textContent = passes===4?'✓ All Systems Green':passes>=2?'⚠ Marginal — Review Flags':'✗ Deal Doesn\'t Work at These Terms';
+  document.getElementById('vchecks').innerHTML = checks.map(c=>
+    `<div class="cp ${c.ok?'ok':c.meh?'meh':'nok'}">${c.ok?'✓':c.meh?'~':'✗'} ${c.l}</div>`
+  ).join('');
+}
+
+// ════════════════════════════════════════════
+// OFFER BUILDER
+// ════════════════════════════════════════════
+function calcOffers() {
+  const perHomeNet = fv('f-lotrent') + fv('f-notepmt') + fv('f-consult') + fv('f-homins') - getChattelPmt();
+  const opex = getOpEx();
+  const invd = gv('invd');
+
+  // --- Offer 1: Bank + Seller Carry ---
+  const o1p  = gv('o1p'), o1b = gv('o1b'), o1s = gv('o1s');
+  const o1sr = fv('f-o1sr')/100, o1st = fv('f-o1st'), o1br = fv('f-o1br')/100;
+  if(o1p>0){
+    const ho1b=document.getElementById('h-o1b'); if(ho1b) ho1b.textContent=pct(o1b/o1p)+' of purchase price';
+    const ho1s=document.getElementById('h-o1s'); if(ho1s) ho1s.textContent=pct(o1s/o1p)+' of purchase price — IO '+o1st+' yr balloon';
+  }
+  const o1bpmt = PMT(o1br,25*12,o1b), o1sio = o1s*(o1sr/12), o1ds = o1bpmt+o1sio;
+  const o1eq = o1p-o1b-o1s;
+  const o1homes = fv('f-homes')||1;
+  const o1ncf = perHomeNet*o1homes - o1ds - opex;
+  document.getElementById('o1-out').innerHTML = `
+    <div class="ol"><span>Equity (cash to close)</span><span class="n">${fmt(o1eq)}</span></div>
+    <div class="ol"><span>Bank P+I / mo</span><span class="n">${fmt(o1bpmt)}</span></div>
+    <div class="ol"><span>Seller IO / mo (${o1st}-yr balloon)</span><span class="n">${fmt(o1sio)}</span></div>
+    <div class="ol"><span>Park OpEx / mo</span><span class="n neg">(${fmt(opex)})</span></div>
+  `;
+  document.getElementById('o1-cop').textContent = fmt(o1eq);
+  document.getElementById('o1-ds').textContent  = fmt(o1ds);
+  const o1ncfEl = document.getElementById('o1-ncf');
+  o1ncfEl.textContent = fmt(o1ncf); o1ncfEl.style.color = o1ncf>=0?'var(--green)':'var(--red)';
+
+  // --- Offer 2: First Lien Only ---
+  const o2p = gv('o2p'), o2b = gv('o2b'), o2br = fv('f-o2br')/100, o2bt = fv('f-o2bt')||25;
+  if(o2p>0){ const h=document.getElementById('h-o2b'); if(h) h.textContent=pct(o2b/o2p)+' of purchase price'; }
+  const o2bpmt = PMT(o2br,o2bt*12,o2b), o2eq = o2p-o2b;
+  const o2ncf = perHomeNet*o1homes - o2bpmt - opex;
+  document.getElementById('o2-out').innerHTML = `
+    <div class="ol"><span>Equity gap (cash / outside capital)</span><span class="n">${fmt(o2eq)}</span></div>
+    <div class="ol"><span>Bank P+I / mo</span><span class="n">${fmt(o2bpmt)}</span></div>
+    <div class="ol"><span>Park OpEx / mo</span><span class="n neg">(${fmt(opex)})</span></div>
+  `;
+  document.getElementById('o2-cop').textContent = fmt(o2eq);
+  document.getElementById('o2-ds').textContent  = fmt(o2bpmt);
+  const o2ncfEl = document.getElementById('o2-ncf');
+  o2ncfEl.textContent = fmt(o2ncf); o2ncfEl.style.color = o2ncf>=0?'var(--green)':'var(--red)';
+
+  // --- Offer 3: Lease + Option ---
+  const o3l = fv('f-o3l'), o3op = fv('f-o3op'), o3om = fv('f-o3om'), o3pad = fv('f-o3pad');
+  const o3prog = perHomeNet * o3pad;
+  const o3m1net = o3prog - o3l - opex;
+  const o3downs = invd * o3pad;
+  document.getElementById('o3-out').innerHTML = `
+    <div class="ol"><span>Total lease (${o3om} mo)</span><span class="n neg">(${fmt(o3l*o3om)})</span></div>
+    <div class="ol"><span>Program income at ${o3pad} pads / mo</span><span class="n pos">${fmt(o3prog)}</span></div>
+    <div class="ol"><span>Break-even pads (lease+opex)</span><span class="n">${perHomeNet>0?Math.ceil((o3l+opex)/perHomeNet):'-'} pads</span></div>
+    <div class="ol"><span>Park OpEx / mo</span><span class="n neg">(${fmt(opex)})</span></div>
+  `;
+  const o3m1El = document.getElementById('o3-m1');
+  o3m1El.textContent = fmt(o3m1net); o3m1El.style.color = o3m1net>=0?'var(--green)':'var(--red)';
+  document.getElementById('o3-downs').textContent = fmt(o3downs);
+
+  // Compare
+  const dscr1 = o1ds>0 ? perHomeNet*o1homes/o1ds : 99;
+  const dscr2 = o2bpmt>0 ? perHomeNet*o1homes/o2bpmt : 99;
+  document.getElementById('offer-cmp').innerHTML = `
+    <tr><th>Metric</th><th style="text-align:right">Offer 1 — Seller Carry</th><th style="text-align:right">Offer 2 — First Lien</th><th style="text-align:right">Offer 3 — Lease/Option</th></tr>
+    <tr><td>Cash to close</td><td class="n">${fmt(o1eq)}</td><td class="n neg">${fmt(o2eq)}</td><td class="n pos">$0</td></tr>
+    <tr><td>Monthly debt/lease obligation</td><td class="n">${fmt(o1ds)}</td><td class="n">${fmt(o2bpmt)}</td><td class="n">${fmt(o3l)}</td></tr>
+    <tr><td>Break-even pads (covers DS+OpEx)</td><td class="n">${perHomeNet>0?Math.ceil((o1ds+opex)/perHomeNet):'-'}</td><td class="n">${perHomeNet>0?Math.ceil((o2bpmt+opex)/perHomeNet):'-'}</td><td class="n">${perHomeNet>0?Math.ceil((o3l+opex)/perHomeNet):'-'}</td></tr>
+    <tr><td>DSCR (at ${o1homes} homes)</td><td class="n ${dscr1>=1.25?'pos':dscr1>=1?'':'neg'}">${dscr1.toFixed(2)}×</td><td class="n ${dscr2>=1.25?'pos':dscr2>=1?'':'neg'}">${dscr2.toFixed(2)}×</td><td class="n pos">N/A</td></tr>
+    <tr><td>Purchase / option price</td><td class="n">${fmt(o1p)}</td><td class="n">${fmt(o2p)}</td><td class="n">${fmt(o3op)}</td></tr>
+    <tr><td>Net cash flow / mo (at scale)</td><td class="n ${o1ncf>=0?'pos':'neg'}">${fmt(o1ncf)}</td><td class="n ${o2ncf>=0?'pos':'neg'}">${fmt(o2ncf)}</td><td class="n ${o3m1net>=0?'pos':'neg'}">${fmt(o3m1net)}</td></tr>
+    <tr><td>Seller financing required?</td><td class="n pos">Yes</td><td class="n neg">No</td><td class="n pos">No (lease)</td></tr>
+    <tr><td>Downside if deal fails</td><td class="n neg">Bank debt on books</td><td class="n neg">Bank debt + large equity</td><td class="n pos">Walk away</td></tr>
+  `;
+}
+
+// ════════════════════════════════════════════
+// INVESTOR CALC
+// ════════════════════════════════════════════
+function calcInv() {
+  const price   = fv('f-ivp');
+  const down    = gv('ivd');
+  const rate    = fv('f-ivrate')/100;
+  const term    = fv('f-ivterm')||20;
+  const rent    = fv('f-ivrent');
+  const lot     = fv('f-ivlot');
+  const consult = fv('f-ivconsult');
+  const ins     = fv('f-ivins');
+  const maint   = fv('f-ivmaint');
+  const capexR  = fv('f-ivcapex');
+  const vacRes  = getVacDollars();
+
+  const hd = document.getElementById('h-ivd'); if(hd&&price>0) hd.textContent = pct(down/price)+' of sale price';
+
+  const principal  = price - down;
+  const notePmt    = PMT(rate, term*12, principal);
+  const netMonthly = rent - lot - notePmt - consult - ins - maint - capexR - vacRes;
+  const coc        = down>0 ? (netMonthly*12)/down : 0;
+
+  document.getElementById('iv-coc').textContent     = pct(coc);
+  document.getElementById('iv-monthly').textContent = fmt(netMonthly);
+  document.getElementById('iv-annual').textContent  = fmtK(netMonthly*12);
+  document.getElementById('iv-y1').textContent      = '→ see below';
+
+  document.getElementById('iv-wf').innerHTML = wfHTML([
+    {label:'Tenant rent received',      val: rent},
+    {label:'Less: lot rent (Larabee)',  val: -lot},
+    {label:'Less: note payment',        val: -notePmt},
+    {label:'Less: consulting fee',      val: -consult},
+    {label:'Less: ins / warranty',      val: -ins},
+    {label:'Less: maintenance reserve', val: -maint},
+    {label:'Less: capex reserve',       val: -capexR},
+    {label:'Less: vacancy reserve',     val: -vacRes},
+    {label:'Your net monthly',          val: netMonthly, type:'net'},
+  ]);
+
+  document.getElementById('iv-sum').innerHTML = `
+    <div class="al"><span>Purchase price</span><span class="n">${fmt(price)}</span></div>
+    <div class="al"><span>Down payment</span><span class="n">${fmt(down)}</span></div>
+    <div class="al"><span>Note principal</span><span class="n">${fmt(principal)}</span></div>
+    <div class="al"><span>LTV</span><span class="n">${price>0?pct(principal/price):'—'}</span></div>
+    <div class="al"><span>Monthly note payment</span><span class="n">${fmt(notePmt)}</span></div>
+    <div class="al"><span>Total monthly deductions</span><span class="n neg">(${fmt(lot+notePmt+consult+ins+maint+capexR+vacRes)})</span></div>
+    <div class="al tot"><span>Cash-on-cash return</span><span class="n ${coc>=0.12?'pos':coc>=0.07?'':'neg'}">${pct(coc)}</span></div>
+  `;
+
+  // Sync dep price to home sale price and recalc dep
+  const depPriceEl = document.getElementById('f-dep-price');
+  if(depPriceEl && Math.abs(parseFloat(depPriceEl.value)-price) > 1000) {
+    depPriceEl.value = Math.round(price);
+    const depSlider = document.getElementById('s-dep-price');
+    if(depSlider) depSlider.value = price;
+  }
+  calcDep();
+}
+
+// ════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════
+function switchTab(name, el) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ════════════════════════════════════════════
+// BONUS DEPRECIATION CALCULATOR
+// ════════════════════════════════════════════
+function setBonusPct(p) {
+  document.getElementById('f-dep-pct').value = p;
+  document.getElementById('s-dep-pct').value = p;
+  calcDep();
+}
+
+function calcDep() {
+  // Sync hidden dep fields from the live tax inputs
+  const ivpEl = document.getElementById('f-ivp');
+  const taxHomesEl = document.getElementById('f-tax-homes');
+  const fedRateEl = document.getElementById('f-dep-rate');
+  const w2El = document.getElementById('f-w2');
+
+  // Use home sale price from investor inputs as dep basis
+  if(ivpEl) { const dp = document.getElementById('f-dep-price'); if(dp) dp.value = parseFloat(ivpEl.value)||100000; }
+  // Sync homes
+  if(taxHomesEl) { const dh = document.getElementById('f-dep-homes'); if(dh) dh.value = parseFloat(taxHomesEl.value)||1; }
+  // Sync fed rate from marginalRate computed in calcTax (approximate from W2)
+  const w2 = parseFloat(w2El?.value)||0;
+  const filing = document.getElementById('sel-filing')?.value||'mfj';
+  const {marginalRate} = computeTax(Math.max(0, w2 - (parseFloat(document.getElementById('f-othded')?.value)||29200)), filing);
+  if(fedRateEl) fedRateEl.value = Math.round(marginalRate*100);
+  const price      = parseFloat(document.getElementById('f-dep-price')?.value) || 0;
+  const bonusPct   = parseFloat(document.getElementById('f-dep-pct')?.value) || 0;
+  const fedRate    = parseFloat(document.getElementById('f-dep-rate')?.value) || 0;
+  const numHomes   = parseFloat(document.getElementById('f-dep-homes')?.value) || 1;
+
+  const totalRate   = fedRate / 100;  // federal only — state modeled in Tax Calculator
+  const bonusBasis  = price * (bonusPct / 100);
+  const remainBasis = price - bonusBasis;
+  const bonusShield = bonusBasis * totalRate;
+
+  // 5-yr MACRS half-year convention rates for remaining basis
+  const macrsRates = [0.20, 0.32, 0.192, 0.1152, 0.1152, 0.0576];
+  const macrsDeductions = macrsRates.map(r => remainBasis * r);
+  const macrsShields    = macrsDeductions.map(d => d * totalRate);
+
+  const yr1TotalDed    = bonusBasis + macrsDeductions[0];
+  const yr1TotalShield = bonusShield + macrsShields[0];
+
+  const invDown = gv('ivd') || 40000;
+  const effectiveDown = invDown - yr1TotalShield;
+  const annualCashflow = (fv('f-ivrent') - fv('f-ivlot') - fv('f-ivconsult') - fv('f-ivins') - fv('f-ivmaint') - fv('f-ivcapex') - getVacDollars()
+    - PMT(fv('f-ivrate')/100, fv('f-ivterm')*12, fv('f-ivp') - invDown)) * 12;
+  const yr1EffReturn = invDown > 0 ? (annualCashflow + yr1TotalShield) / invDown : 0;
+  const isInfinite   = yr1TotalShield >= invDown; // tax shield alone exceeds down payment
+
+  // Hint update
+  const hintEl = document.getElementById('dep-pct-hint');
+  if(hintEl) hintEl.textContent = bonusPct === 100
+    ? '100% — permanent under the One Big Beautiful Bill (2025)'
+    : bonusPct === 0
+    ? '0% — no bonus depreciation (straight-line MACRS only)'
+    : bonusPct + '% — hypothetical scenario';
+
+  // iv-y1 hero tile — show ∞ and highlight green if shield > down payment
+  const y1El = document.getElementById('iv-y1');
+  const y1Tile = y1El?.closest('.im');
+  const imlEl = y1El?.nextElementSibling;
+  if(y1El) {
+    if(isInfinite) {
+      y1El.textContent = '∞';
+      y1El.className = 'imv inf-val';
+      if(y1Tile) y1Tile.className = 'im inf-tile';
+      if(imlEl) { imlEl.textContent = 'Tax Shield > Down Payment'; imlEl.className = 'iml inf-lbl'; }
+    } else {
+      y1El.textContent = yr1EffReturn >= 0.5 ? pct(yr1EffReturn) + ' 🔥' : pct(yr1EffReturn);
+      y1El.className = 'imv';
+      if(y1Tile) y1Tile.className = 'im';
+      if(imlEl) { imlEl.textContent = 'Yr-1 Return (w/ depreciation)'; imlEl.className = 'iml'; }
+    }
+  }
+
+  // ── SINGLE HOME OUTPUT ──
+  const infiniteNote = isInfinite
+    ? `<div class="inf-banner">
+        <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#7fff9a;font-weight:700;margin-bottom:8px">🏆 Infinite Return — The IRS Pays You to Own This Home</div>
+        <div style="font-size:14px;font-weight:600;line-height:1.6;color:white">Your federal tax shield of <strong style="color:#7fff9a">${fmt(yr1TotalShield)}</strong> exceeds your down payment of <strong style="color:#ffd700">${fmt(invDown)}</strong>.<br>
+        Effective net cost in Year 1: <strong style="color:#7fff9a">($${Math.abs(Math.round(yr1TotalShield - invDown)).toLocaleString()}) — you come out ahead before collecting a single rent check.</strong></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:8px">Assumes REP status or STR material participation. State tax benefit adds further upside. §1245 recapture applies at sale.</div>
+      </div>`
+    : '';
+
+  document.getElementById('dep-out-single').innerHTML = `
+    <div class="al"><span>Full depreciable basis (100% of price)</span><span class="n">${fmt(price)}</span></div>
+    <div class="al"><span>Bonus deduction (${bonusPct}% of basis)</span><span class="n pos">${fmt(bonusBasis)}</span></div>
+    <div class="al"><span>Remaining basis → 5-yr MACRS</span><span class="n">${fmt(remainBasis)}</span></div>
+    <div class="al"><span>Yr-1 MACRS on remaining (20%)</span><span class="n pos">${fmt(macrsDeductions[0])}</span></div>
+    <div class="al tot"><span>Total Year-1 deduction</span><span class="n pos">${fmt(yr1TotalDed)}</span></div>
+    <div class="al"><span>Federal tax shield (${fedRate}%)</span><span class="n pos">${fmt(yr1TotalShield)}</span></div>
+    <div class="al"><span style="color:var(--mid)">Investor down payment</span><span class="n" style="color:var(--mid)">${fmt(invDown)}</span></div>
+    <div class="al"><span style="color:var(--mid)">Effective net cost after shield</span><span class="n ${effectiveDown<=0?'pos':''}" style="color:${effectiveDown<=0?'var(--green)':'var(--mid)'}">${effectiveDown<=0?'($'+Math.abs(Math.round(effectiveDown)).toLocaleString()+') NET POSITIVE':fmt(effectiveDown)}</span></div>
+    <div class="al tot" style="background:rgba(45,107,69,.08);border-radius:4px;padding:8px 4px">
+      <span>Yr-1 effective return (cash + shield / down)</span>
+      <span class="n" style="color:${isInfinite?'var(--green)':yr1EffReturn>=0.5?'var(--green)':'var(--terra)'}"><strong>${isInfinite?'∞ — Shield exceeds down payment':pct(yr1EffReturn)}</strong></span>
+    </div>
+    ${infiniteNote}
+  `;
+
+  // ── PORTFOLIO OUTPUT ──
+  document.getElementById('dep-home-count').textContent = numHomes;
+  document.getElementById('dep-out-portfolio').innerHTML = `
+    <div class="al"><span>Total bonus deduction (${numHomes} homes)</span><span class="n pos">${fmt(bonusBasis * numHomes)}</span></div>
+    <div class="al tot"><span>Total Year-1 tax shield</span><span class="n pos">${fmt(yr1TotalShield * numHomes)}</span></div>
+    <div class="al"><span>Avg shield per home</span><span class="n">${fmt(yr1TotalShield)}</span></div>
+  `;
+
+  // ── MACRS SCHEDULE TABLE ──
+  const years = ['Yr 1 (remaining)','Yr 2','Yr 3','Yr 4','Yr 5','Yr 6'];
+  let rows = `<tr><th>Year</th><th style="text-align:right">MACRS Rate</th><th style="text-align:right">Deduction</th><th style="text-align:right">Tax Shield</th><th style="text-align:right">Cumul. Shield</th></tr>`;
+  let cumShield = yr1TotalShield; // already includes bonus
+  rows += `<tr style="background:rgba(45,107,69,.06)"><td><strong>Yr 1 — Bonus</strong></td><td class="n">${bonusPct}%</td><td class="n pos"><strong>${fmt(bonusBasis)}</strong></td><td class="n pos"><strong>${fmt(bonusShield)}</strong></td><td class="n"></td></tr>`;
+  macrsDeductions.forEach((d,i) => {
+    const shield = macrsShields[i];
+    if(i===0) cumShield = yr1TotalShield;
+    else cumShield += shield;
+    rows += `<tr><td>${years[i]}</td><td class="n">${(macrsRates[i]*100).toFixed(2)}%</td><td class="n">${fmt(d)}</td><td class="n">${fmt(shield)}</td><td class="n">${fmt(cumShield)}</td></tr>`;
+  });
+  document.getElementById('dep-macrs-tbl').innerHTML = rows;
+}
+
+// ════════════════════════════════════════════
+// TAX BENEFIT CALCULATOR
+// ════════════════════════════════════════════
+let repStatus = 'passive';
+
+// 2024 Federal Tax Brackets
+const BRACKETS = {
+  mfj: [
+    {max:23200,  rate:0.10},
+    {max:94300,  rate:0.12},
+    {max:201050, rate:0.22},
+    {max:383900, rate:0.24},
+    {max:487450, rate:0.32},
+    {max:731200, rate:0.35},
+    {max:Infinity,rate:0.37},
+  ],
+  single: [
+    {max:11600,  rate:0.10},
+    {max:47150,  rate:0.12},
+    {max:100525, rate:0.22},
+    {max:191950, rate:0.24},
+    {max:243725, rate:0.32},
+    {max:609350, rate:0.35},
+    {max:Infinity,rate:0.37},
+  ],
+  hoh: [
+    {max:16550,  rate:0.10},
+    {max:63100,  rate:0.12},
+    {max:100500, rate:0.22},
+    {max:191950, rate:0.24},
+    {max:243700, rate:0.32},
+    {max:609350, rate:0.35},
+    {max:Infinity,rate:0.37},
+  ],
+};
+
+// State effective rates (top marginal for high earners — simplified)
+const STATE_RATES = {
+  NC:0.045, NY:0.1090, NYC:0.1478, CA:0.133, TX:0, FL:0, WA:0,
+  NJ:0.1075, CT:0.0699, MA:0.05, GA:0.0549, VA:0.0575, other:0,
+};
+
+const STATE_NAMES = {
+  NC:'North Carolina', NY:'New York', NYC:'New York (+ NYC)',
+  CA:'California', TX:'Texas', FL:'Florida', WA:'Washington',
+  NJ:'New Jersey', CT:'Connecticut', MA:'Massachusetts',
+  GA:'Georgia', VA:'Virginia', other:'Custom',
+};
+
+function computeTax(taxableIncome, filing) {
+  if(taxableIncome <= 0) return {tax:0, marginalRate:0.10};
+  const brackets = BRACKETS[filing] || BRACKETS.mfj;
+  let tax = 0, prev = 0, marginalRate = 0.10;
+  for(const b of brackets) {
+    if(taxableIncome <= prev) break;
+    const chunk = Math.min(taxableIncome, b.max) - prev;
+    tax += chunk * b.rate;
+    marginalRate = b.rate;
+    if(taxableIncome <= b.max) break;
+    prev = b.max;
+  }
+  return {tax, marginalRate};
+}
+
+function getBracketLabel(income, filing) {
+  const brackets = BRACKETS[filing] || BRACKETS.mfj;
+  for(const b of brackets) { if(income <= b.max) return Math.round(b.rate*100)+'%'; }
+  return '37%';
+}
+
+function getStateRate() {
+  const sel = document.getElementById('sel-state')?.value;
+  if(sel === 'other') return (parseFloat(document.getElementById('f-custom-state')?.value)||0)/100;
+  return STATE_RATES[sel] || 0;
+}
+
+function setRepStatus(status) {
+  repStatus = status;
+  ['passive','active','rep'].forEach(s => {
+    const b = document.getElementById('rep-btn-'+s); if(b) b.classList.toggle('on', s===status);
+  });
+  const notes = {
+    passive: `<strong>Passive Investor:</strong> Depreciation losses are <em>passive</em> under §469 and can only offset other passive income (rental income, K-1 distributions, limited partnership gains). They <strong>cannot</strong> directly offset W-2 wages. Unused losses carry forward indefinitely and are released in full upon disposition of the property. <span style="color:var(--terra)">The carryforward is still real value — it just comes at sale or when passive income is available to absorb it.</span>`,
+    active:  `<strong>Active Participation (§469(i)):</strong> Taxpayers who actively participate in managing their rental (approve tenants, set rents, authorize repairs) may deduct up to <strong>$25,000</strong> of rental losses against ordinary income. This phases out ratably between $100K–$150K MAGI and is <strong>completely unavailable above $150K</strong>. Losses beyond the allowance carry forward. <span style="color:var(--terra)">For most high-W2 investors this is largely irrelevant — only useful if MAGI is below $100K.</span>`,
+    rep:     `<strong>Real Estate Professional (§469(c)(7)):</strong> Rental losses are <strong>non-passive</strong> and offset W-2 / ordinary income dollar-for-dollar with no cap. If one spouse qualifies on a joint return, REP status applies to the entire MFJ return — including the high-W2 spouse's income. Prior-year suspended passive losses are also released in full in the first year REP status is achieved. <span style="color:var(--green)">This is the most powerful tax position available to a real estate investor. See the qualification guide below.</span>`,
+  };
+  const noteEl = document.getElementById('rep-status-note'); if(noteEl) noteEl.innerHTML = notes[status];
+  const coEl = document.getElementById('ig-carryover');
+  if(coEl) coEl.style.display = status==='rep' ? 'block' : 'none';
+  calcTax();
+}
+
+function calcTax() {
+  const w2        = parseFloat(document.getElementById('f-w2')?.value?.replace(/[^0-9]/g,''))||0;
+  const othDed    = parseFloat(document.getElementById('f-othded')?.value?.replace(/[^0-9]/g,''))||0;
+  const numHomes  = parseFloat(document.getElementById('f-tax-homes')?.value)||1;
+  const filing    = document.getElementById('sel-filing')?.value || 'mfj';
+  const stateRate = getStateRate();
+  const stateSel  = document.getElementById('sel-state')?.value||'NC';
+  const carryover = parseFloat(document.getElementById('f-carryover')?.value?.replace(/[^0-9]/g,''))||0;
+  const bonusPct  = parseFloat(document.getElementById('f-dep-pct')?.value)||60;
+  const homePrice = parseFloat(document.getElementById('f-dep-price')?.value)||100000;
+  const csState   = document.getElementById('ig-custom-state');
+  if(csState) csState.style.display = stateSel==='other' ? 'block' : 'none';
+
+  // Sync s-w2 slider
+  const w2sl = document.getElementById('s-w2'); if(w2sl) w2sl.value = Math.min(w2,2000000);
+
+  // Per-home bonus deduction
+  const perHomeDed  = homePrice * (bonusPct/100);
+  const totalDepDed = perHomeDed * numHomes;
+
+  // BEFORE: taxable income without investment
+  const tiBeforeRaw = w2 - othDed;
+  const tiBefore    = Math.max(0, tiBeforeRaw);
+  const {tax: fedBefore, marginalRate} = computeTax(tiBefore, filing);
+  const stateBefore = Math.max(0, w2 - othDed) * stateRate; // simplified — state doesn't always conform
+  const totalBefore = fedBefore + stateBefore;
+
+  // Bracket label + hint
+  const bracketLabel = getBracketLabel(tiBefore, filing);
+  const hw2 = document.getElementById('h-w2');
+  if(hw2) hw2.textContent = bracketLabel + ' federal bracket (' + filing.toUpperCase().replace('MFJ','Married Filing Jointly').replace('HOH','Head of Household') + ')';
+
+  // AFTER: apply deduction based on REP status
+  let effectiveDepDed = 0;
+  let carryforwardNote = '';
+  let releasedCarryover = 0;
+
+  if(repStatus === 'rep') {
+    // Full deduction — RE Professional makes all losses non-passive
+    // Applies to entire MFJ return if either spouse qualifies
+    releasedCarryover = carryover;
+    effectiveDepDed = totalDepDed + releasedCarryover;
+    carryforwardNote = releasedCarryover > 0
+      ? `REP status releases ${fmt(releasedCarryover)} in prior suspended passive losses. Total Year-1 deduction: ${fmt(effectiveDepDed)}.`
+      : `RE Professional status — full ${fmt(totalDepDed)} bonus deduction offsets W-2 income with no cap. Applies to entire MFJ return if either spouse qualifies.`;
+  } else if(repStatus === 'active') {
+    // $25K cap per taxpayer (not per property), phases out $100K–$150K MAGI
+    // Above $150K AGI: zero benefit — losses carry forward
+    const magi = w2; // simplified proxy
+    if(magi > 150000) {
+      effectiveDepDed = 0;
+      carryforwardNote = `AGI of ${fmt(magi)} exceeds $150K phase-out threshold — the $25K active participation allowance is fully phased out. ${fmt(totalDepDed)} in losses carry forward. Consider whether spousal REP status applies.`;
+    } else {
+      const maxAllowed = magi > 100000 ? 25000 * Math.max(0, (150000 - magi) / 50000) : 25000;
+      effectiveDepDed = Math.min(totalDepDed, maxAllowed);
+      const suspended = totalDepDed - effectiveDepDed;
+      carryforwardNote = suspended > 0
+        ? `${fmt(effectiveDepDed)} deducted against ordinary income (active participation allowance). ${fmt(suspended)} suspended — carry forward.`
+        : `Full ${fmt(totalDepDed)} deduction applied under active participation (AGI below phase-out).`;
+    }
+  } else {
+    // Passive — only offsets passive income (assume $0 other passive income for conservatism)
+    effectiveDepDed  = 0;
+    carryforwardNote = `${fmt(totalDepDed)} in losses are passive — carried forward. They will offset future passive income or release upon property sale. Shown below as deferred benefit.`;
+  }
+
+  const tiAfterRaw  = Math.max(0, tiBefore - effectiveDepDed);
+  const {tax: fedAfter} = computeTax(tiAfterRaw, filing);
+  const stateAfter   = tiAfterRaw * stateRate;
+  const totalAfter   = fedAfter + stateAfter;
+
+  const fedRefund    = fedBefore - fedAfter;
+  const stateRefund  = stateBefore - stateAfter;
+  const totalRefund  = fedRefund + stateRefund;
+  const deferredBen  = repStatus==='passive' ? totalDepDed * marginalRate : 0; // future value if all passive
+
+  // Mortgage interest deduction (interest portion of note payment * 12)
+  const noteRate   = (parseFloat(document.getElementById('f-ivrate')?.value)||6.5)/100;
+  const notePrin   = (parseFloat(document.getElementById('f-ivp')?.value)||100000) - (gv('ivd')||40000);
+  const annualInt  = notePrin * noteRate; // simplified (Year-1 interest ≈ principal × rate)
+  const intDed     = annualInt * numHomes;
+  const intShield  = intDed * marginalRate;
+
+  // True CoC (cash income + tax refund + interest shield) / down payment
+  const annCashflow   = ((fv('f-ivrent') - fv('f-ivlot') - fv('f-ivconsult') - fv('f-ivins') - fv('f-ivmaint') - fv('f-ivcapex') - getVacDollars())
+    - PMT(noteRate, (fv('f-ivterm')||20)*12, notePrin)) * 12 * numHomes;
+  const invDown       = (gv('ivd')||40000) * numHomes;
+  const trueCoc       = invDown > 0 ? (annCashflow + totalRefund + intShield) / invDown : 0;
+  const cashOnlyCoc   = invDown > 0 ? annCashflow / invDown : 0;
+
+  // ── KPI GRID ──
+  const kpiEl = document.getElementById('tax-kpis');
+  if(kpiEl) kpiEl.innerHTML = [
+    {l:'W-2 Income',         v: fmt(w2),          c:'var(--pine)'},
+    {l:'Federal Bracket',    v: bracketLabel,      c:'var(--pine)'},
+    {l:'State Rate',         v: pct(stateRate),    c:'var(--pine)'},
+    {l:'Tax Bill (before)',  v: fmt(totalBefore),  c:'var(--red)'},
+    {l:'Tax Bill (after)',   v: fmt(totalAfter),   c:'var(--green)'},
+    {l:'Total Reduction',    v: fmt(totalRefund),  c:'var(--green)'},
+  ].map(t=>`<div style="background:rgba(31,54,40,.06);border-radius:5px;padding:10px 12px">
+    <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:${t.c}">${t.v}</div>
+    <div style="font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--mid);margin-top:2px">${t.l}</div>
+  </div>`).join('');
+
+  // ── BEFORE/AFTER TABLE ──
+  document.getElementById('tax-ba-tbl').innerHTML = `
+    <tr><th>Line Item</th><th style="text-align:right">Before Investment</th><th style="text-align:right">After Investment</th><th style="text-align:right">Δ Change</th></tr>
+    <tr><td>W-2 / Ordinary Income</td><td class="n">${fmt(w2)}</td><td class="n">${fmt(w2)}</td><td class="n">—</td></tr>
+    <tr><td>Standard / Itemized Deductions</td><td class="n neg">(${fmt(othDed)})</td><td class="n neg">(${fmt(othDed)})</td><td class="n">—</td></tr>
+    <tr><td>Bonus Depreciation Deduction (${numHomes} home${numHomes>1?'s':''})</td><td class="n">$0</td><td class="n neg">(${fmt(effectiveDepDed)})</td><td class="n pos">-${fmt(effectiveDepDed)}</td></tr>
+    <tr class="tot"><td>Federal Taxable Income</td><td class="n">${fmt(tiBefore)}</td><td class="n">${fmt(tiAfterRaw)}</td><td class="n pos">-${fmt(tiBefore-tiAfterRaw)}</td></tr>
+    <tr><td>Federal Income Tax</td><td class="n neg">${fmt(fedBefore)}</td><td class="n pos">${fmt(fedAfter)}</td><td class="n pos">-${fmt(fedRefund)}</td></tr>
+    <tr><td>State Income Tax (${STATE_NAMES[stateSel]||'Custom'})</td><td class="n neg">${fmt(stateBefore)}</td><td class="n pos">${fmt(stateAfter)}</td><td class="n pos">-${fmt(stateRefund)}</td></tr>
+    <tr class="tot"><td>Total Tax Bill</td><td class="n neg">${fmt(totalBefore)}</td><td class="n pos">${fmt(totalAfter)}</td><td class="n pos">-${fmt(totalRefund)}</td></tr>
+    ${repStatus==='passive'?`<tr><td style="color:var(--gold)">Passive Loss Carryforward (deferred)</td><td class="n">$0</td><td class="n" style="color:var(--gold)">${fmt(totalDepDed)}</td><td class="n" style="color:var(--gold)">+${fmt(totalDepDed)}</td></tr>`:''}
+  `;
+
+  // ── REFUND HERO BOX ──
+  const heroBox = document.getElementById('tax-hero-box');
+  const isPassive = repStatus==='passive';
+  const heroColor = isPassive ? 'rgba(201,168,76,.12)' : 'rgba(45,107,69,.08)';
+  const heroBorder = isPassive ? 'var(--gold)' : 'var(--green)';
+  heroBox.style.background = heroColor;
+  heroBox.style.border = `2px solid ${heroBorder}`;
+  document.getElementById('tax-hero-label').textContent = isPassive
+    ? 'Deferred Tax Benefit (Passive Carryforward)'
+    : repStatus==='rep' ? 'Tax Reduction — RE Professional (§469(c)(7))'
+    : 'Tax Reduction — Active Participation';
+  document.getElementById('tax-hero-label').style.color = isPassive ? '#7a5a20' : 'var(--green)';
+  document.getElementById('tax-hero-val').textContent   = isPassive ? fmt(deferredBen) : fmt(totalRefund);
+  document.getElementById('tax-hero-val').style.color   = isPassive ? '#7a5a20' : 'var(--green)';
+  document.getElementById('tax-hero-sub').textContent   = isPassive
+    ? `${fmt(totalDepDed)} in losses suspended — deferred value at ${Math.round(marginalRate*100)}% bracket. Released at sale or when passive income is available.`
+    : `${fmt(fedRefund)} federal + ${fmt(stateRefund)} state — direct reduction in your ${new Date().getFullYear()} tax bill. ${carryforwardNote}`;
+  document.getElementById('tax-hero-sub').style.color   = isPassive ? '#7a5a20' : 'var(--mid)';
+
+  // ── TRUE CoC ──
+  document.getElementById('true-coc-out').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      <div style="background:rgba(31,54,40,.06);border-radius:5px;padding:11px 13px">
+        <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:${cashOnlyCoc>=0?'var(--pine)':'var(--mid)'}">${fmt(annCashflow/12/numHomes)}<span style="font-size:10px;font-weight:400;color:var(--light)">/mo net</span></div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-top:2px">Monthly Cash Income (pre-tax)</div>
+      </div>
+      <div style="background:rgba(31,54,40,.06);border-radius:5px;padding:11px 13px">
+        <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:${intShield>0?'var(--green)':'var(--mid)'}">${fmt(intShield)}</div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-top:2px">Mortgage Interest Write-off Value</div>
+      </div>
+      <div style="background:rgba(31,54,40,.06);border-radius:5px;padding:11px 13px">
+        <div style="font-family:'DM Mono',monospace;font-size:15px;font-weight:600;color:${isPassive?'var(--gold)':'var(--green)'}">${isPassive?fmt(deferredBen):fmt(totalRefund)}</div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-top:2px">${isPassive?'Tax Benefit (Deferred)':'Tax Refund / Bill Reduction'}</div>
+      </div>
+      <div style="background:${trueCoc>=0.20?'rgba(45,107,69,.15)':'rgba(31,54,40,.06)'};border:${trueCoc>=0.20?'2px solid var(--green)':'1px solid var(--rule)'};border-radius:5px;padding:11px 13px">
+        <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:${trueCoc>=0.20?'var(--green)':trueCoc>=0.10?'var(--pine)':'var(--red)'}">${pct(trueCoc)}</div>
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-top:2px">True Year-1 Return</div>
+      </div>
+    </div>
+    ${carryforwardNote ? `<div style="font-size:11px;color:var(--mid);line-height:1.5;padding:8px 10px;background:var(--bone);border-radius:4px;margin-top:4px">${carryforwardNote}</div>` : ''}
+  `;
+
+  // Update note on tax law
+  const noteEl = document.getElementById('tax-law-note');
+  if(noteEl) noteEl.innerHTML = '';
+  // Sync dep calculator (uses same inputs)
+  calcDep();
+}
+
+// ════════════════════════════════════════════
+// SHARE / SEND DEAL
+// ════════════════════════════════════════════
+
+// Fields that get encoded into the share URL (deal terms only, not investor profile)
+const SHARE_FIELDS = [
+  'f-ivp','f-ivrate','f-ivterm','f-ivrent','f-ivlot',
+  'f-ivconsult','f-ivins','f-ivmaint','f-ivcapex',
+];
+
+function getResolvedDown() {
+  // Always return dollar value regardless of % or $ mode
+  const raw = parseFloat(document.getElementById('f-ivd')?.value) || 0;
+  if(modes['ivd'] === 'p') {
+    const price = parseFloat(document.getElementById('f-ivp')?.value) || 100000;
+    return Math.round(raw / 100 * price);
+  }
+  return Math.round(raw);
+}
+
+function getResolvedVac() {
+  // Always return dollar value
+  return Math.round(getVacDollars());
+}
+
+// ════════════════════════════════════════════
+// SHARE / SEND DEAL — Hosted link, per-investor logins
+// ════════════════════════════════════════════
+
+function getSiteUrl() {
+  // The live link investors open — works on the free GitHub link
+  // or the custom larabeehomesllc.com subdomain, automatically.
+  return window.location.origin + window.location.pathname;
+}
+
+function copyInvestorLink() {
+  const url = getSiteUrl();
+  const done = () => showShareConfirm('✓ Link copied — paste it into your email or text');
+  navigator.clipboard.writeText(url).then(done).catch(() => {
+    const inp = document.getElementById('investor-link');
+    if(inp) { inp.focus(); inp.select(); document.execCommand('copy'); }
+    done();
+  });
+}
+
+function buildPitchMessage() {
+  const price = parseFloat(document.getElementById('f-ivp')?.value) || 100000;
+  const down  = getResolvedDown();
+  const rent  = parseFloat(document.getElementById('f-ivrent')?.value) || 925;
+  const name  = document.getElementById('active-deal-name')?.textContent || 'this deal';
+  const url   = getSiteUrl();
+  return `Hey — I wanted to share an investment opportunity through Larabee Homes LLC.\n\n${name}:\n• Home price: $${price.toLocaleString()}\n• Down payment: $${down.toLocaleString()}\n• Monthly rent: $${rent.toLocaleString()}/mo\n• 100% bonus depreciation — 5-yr MACRS (One Big Beautiful Bill 2025)\n\nView the full interactive breakdown here — it works on your phone or computer, in any browser:\n${url}\n\nYour private login:\n• Username: [ add username ]\n• Password: [ add password ]\n\nLog in and enter your income to see your personal Year-1 return.\n\nHappy to walk through the numbers.\n— Cade Larabee, Larabee Homes LLC`;
+}
+
+function shareViaEmail() {
+  const msg = buildPitchMessage();
+  window.location.href = `mailto:?subject=${encodeURIComponent('Larabee Homes — Investment Opportunity')}&body=${encodeURIComponent(msg)}`;
+}
+
+function copyPitchMessage() {
+  const msg = buildPitchMessage();
+  const done = () => showShareConfirm('✓ Pitch copied — add the login, then paste into email or text');
+  navigator.clipboard.writeText(msg).then(done).catch(() => {
+    const ta = document.createElement('textarea'); ta.value = msg;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    done();
+  });
+}
+
+function openShareModal() {
+  const modal = document.getElementById('share-modal');
+  if(modal) modal.style.display = 'flex';
+  const linkInp = document.getElementById('investor-link');
+  if(linkInp) linkInp.value = getSiteUrl();
+  const conf = document.getElementById('share-confirm');
+  if(conf) conf.style.display = 'none';
+}
+
+function closeShareModal() {
+  const modal = document.getElementById('share-modal');
+  if(modal) modal.style.display = 'none';
+}
+
+function showShareConfirm(msg) {
+  const el = document.getElementById('share-confirm');
+  if(el) { el.textContent = msg; el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 4000); }
+}
+
+function buildShareUrl() { return ''; }
+
+// On load — check if this is an investor copy with baked-in deal params
+function applyUrlParams() {
+  // Check for params baked in by downloadInvestorFile()
+  const baked = window.__INVESTOR_DEAL;
+  // Also check URL params (for hosted version)
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramStr = baked || (urlParams.get('locked') ? window.location.search.slice(1) : null);
+  if(!paramStr) return;
+
+  const params = new URLSearchParams(paramStr);
+  if(!params.get('locked')) return;
+
+  // Apply deal term fields
+  SHARE_FIELDS.forEach(id => {
+    const val = params.get(id);
+    const el  = document.getElementById(id);
+    const sl  = document.getElementById('s-' + id.slice(2));
+    if(el && val !== null) { el.value = val; if(sl) sl.value = parseFloat(val)||0; }
+  });
+
+  // Down payment — always dollars
+  const downD = params.get('ivd-dollars');
+  if(downD !== null) {
+    modes['ivd'] = 'd';
+    const db = document.getElementById('ivd-d'), pb = document.getElementById('ivd-p');
+    if(db) db.classList.add('on'); if(pb) pb.classList.remove('on');
+    const fivd = document.getElementById('f-ivd'), sivd = document.getElementById('s-ivd');
+    if(fivd) fivd.value = downD;
+    if(sivd) { sivd.min=5000; sivd.max=200000; sivd.step=1000; sivd.value=downD; }
+    const hd = document.getElementById('h-ivd');
+    const price = parseFloat(params.get('f-ivp'))||100000;
+    if(hd) hd.textContent = `$${parseInt(downD).toLocaleString()} — ${(parseInt(downD)/price*100).toFixed(1)}% of sale price`;
+  }
+
+  // Vacancy — always dollars
+  const vacD = params.get('ivvac-dollars');
+  if(vacD !== null) {
+    vacMode = 'd';
+    const vdb = document.getElementById('ivvac-d'), vpb = document.getElementById('ivvac-p');
+    if(vdb) vdb.classList.add('on'); if(vpb) vpb.classList.remove('on');
+    const fvac = document.getElementById('f-ivvac'), svac = document.getElementById('s-ivvac');
+    if(fvac) fvac.value = vacD;
+    if(svac) { svac.min=0; svac.max=500; svac.step=1; svac.value=vacD; }
+    const rent = parseFloat(params.get('f-ivrent'))||925;
+    const h = document.getElementById('h-ivvac');
+    if(h) h.textContent = `$${parseInt(vacD).toLocaleString()}/mo — ${(parseInt(vacD)/rent*100).toFixed(1)}% of rent`;
+  }
+
+  // Lock and recalc
+  dealLocked = true;
+  applyLock();
+  calc(); calcOffers(); calcInv(); calcDep(); calcTax();
+
+  // INVESTOR-ONLY MODE — hide everything except investor view
+  // Remove nav bar tabs (keep logo)
+  document.querySelector('.nav')?.remove();
+
+  // Hide operator-facing UI
+  ['deal-chips', 'lock-bar', 'share-modal', 'save-deal-modal'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+
+  // Hide the deal manager bar (parent of deal-chips)
+  document.querySelectorAll('[style*="SAVED DEALS"], .deal-manager-bar').forEach(el => el.style.display = 'none');
+  // The deal manager bar is the first child div of tab-investor — hide it
+  const invTab = document.getElementById('tab-investor');
+  if(invTab) {
+    // Hide first two divs (deal manager bar + lock bar area)
+    const children = invTab.children;
+    if(children[0]) children[0].style.display = 'none'; // deal manager
+    if(children[1]) children[1].style.display = 'none'; // share modal
+    if(children[2]) children[2].style.display = 'none'; // lock bar
+  }
+
+  // Hide all other tabs, show only investor
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const investorView = document.getElementById('tab-investor');
+  if(investorView) investorView.classList.add('active');
+
+  // Remove the other tab views from DOM entirely so they can't be navigated to
+  ['tab-operator','tab-offers'].forEach(id => {
+    document.getElementById(id)?.remove();
+  });
+
+  // Replace nav with clean investor header (logo + deal name only)
+  const hdr = document.querySelector('.hdr');
+  if(hdr) {
+    const dealName = params.get('deal-name') || 'Investment Opportunity';
+    hdr.innerHTML = `
+      <div class="logo">Larabee <span>Homes</span></div>
+      <div style="font-size:12px;color:var(--mint);font-weight:500">${dealName}</div>
+    `;
+  }
+}
+
+// Close modals on backdrop click
+document.addEventListener('click', e => {
+  const sm = document.getElementById('share-modal');
+  if(sm && e.target === sm) closeShareModal();
+  const sdm = document.getElementById('save-deal-modal');
+  if(sdm && e.target === sdm) closeSaveDealModal();
+});
+
+// ════════════════════════════════════════════
+// DEAL MANAGER — Save / Load / Switch
+// ════════════════════════════════════════════
+
+function getDealSnapshot(name) {
+  return {
+    name,
+    ts: Date.now(),
+    ivp:     document.getElementById('f-ivp')?.value     || '',
+    ivd:     getResolvedDown(),
+    ivrate:  document.getElementById('f-ivrate')?.value  || '',
+    ivterm:  document.getElementById('f-ivterm')?.value  || '',
+    ivrent:  document.getElementById('f-ivrent')?.value  || '',
+    ivlot:   document.getElementById('f-ivlot')?.value   || '',
+    ivconsult: document.getElementById('f-ivconsult')?.value || '',
+    ivins:   document.getElementById('f-ivins')?.value   || '',
+    ivmaint: document.getElementById('f-ivmaint')?.value || '',
+    ivcapex: document.getElementById('f-ivcapex')?.value || '',
+    ivvac:   getResolvedVac(),
+  };
+}
+
+function applyDealSnapshot(snap) {
+  const map = {
+    'f-ivp': snap.ivp, 'f-ivrate': snap.ivrate, 'f-ivterm': snap.ivterm,
+    'f-ivrent': snap.ivrent, 'f-ivlot': snap.ivlot, 'f-ivconsult': snap.ivconsult,
+    'f-ivins': snap.ivins, 'f-ivmaint': snap.ivmaint, 'f-ivcapex': snap.ivcapex,
+  };
+  Object.entries(map).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    const sl = document.getElementById('s-' + id.slice(2));
+    if(el) el.value = val;
+    if(sl) sl.value = parseFloat(val) || 0;
+  });
+  // Down payment — always as dollars
+  modes['ivd'] = 'd';
+  const db = document.getElementById('ivd-d'), pb = document.getElementById('ivd-p');
+  if(db) db.classList.add('on'); if(pb) pb.classList.remove('on');
+  const fivd = document.getElementById('f-ivd'), sivd = document.getElementById('s-ivd');
+  if(fivd) fivd.value = snap.ivd;
+  if(sivd) { sivd.min=5000; sivd.max=200000; sivd.step=1000; sivd.value = snap.ivd; }
+  // Vacancy — always as dollars
+  vacMode = 'd';
+  const vdb = document.getElementById('ivvac-d'), vpb = document.getElementById('ivvac-p');
+  if(vdb) vdb.classList.add('on'); if(vpb) vpb.classList.remove('on');
+  const fvac = document.getElementById('f-ivvac'), svac = document.getElementById('s-ivvac');
+  if(fvac) fvac.value = snap.ivvac;
+  if(svac) { svac.min=0; svac.max=500; svac.step=1; svac.value = snap.ivvac; }
+  const rent = parseFloat(snap.ivrent) || 925;
+  const h = document.getElementById('h-ivvac');
+  if(h) h.textContent = `$${parseInt(snap.ivvac).toLocaleString()}/mo — ${rent > 0 ? (snap.ivvac/rent*100).toFixed(1) : '0'}% of rent`;
+
+  calc(); calcOffers(); calcInv(); calcDep(); calcTax();
+}
+
+function loadSavedDeals() {
+  try { return JSON.parse(localStorage.getItem('larabee-deals') || '{}'); } catch(e) { return {}; }
+}
+
+function persistDeals(deals) {
+  try { localStorage.setItem('larabee-deals', JSON.stringify(deals)); } catch(e) { console.warn('localStorage unavailable'); }
+}
+
+function renderDealChips() {
+  const deals = loadSavedDeals();
+  const keys = Object.keys(deals).sort((a,b) => deals[b].ts - deals[a].ts);
+  const container = document.getElementById('deal-chips');
+  if(!container) return;
+  if(!keys.length) {
+    container.innerHTML = '<span style="font-size:11px;color:var(--light);font-style:italic">No saved deals yet</span>';
+    return;
+  }
+  container.innerHTML = keys.map(k => {
+    const d = deals[k];
+    const active = activeDealKey === k;
+    return `<div style="display:flex;align-items:center;gap:0;border-radius:20px;overflow:hidden;border:1px solid ${active?'var(--pine)':'var(--rule)'}">
+      <button onclick="loadDeal('${k}')" style="font-size:11px;font-weight:${active?'700':'500'};padding:4px 12px;background:${active?'var(--pine)':'white'};color:${active?'white':'var(--ink)'};border:none;cursor:pointer;white-space:nowrap">${d.name}</button>
+      <button onclick="deleteDeal('${k}')" style="font-size:11px;padding:4px 8px;background:${active?'var(--pine)':'white'};color:${active?'rgba(255,255,255,.6)':'var(--light)'};border:none;border-left:1px solid ${active?'rgba(255,255,255,.2)':'var(--rule)'};cursor:pointer" title="Delete">×</button>
+    </div>`;
+  }).join('');
+}
+
+let activeDealKey = null;
+
+function loadDeal(key) {
+  const deals = loadSavedDeals();
+  if(!deals[key]) return;
+  activeDealKey = key;
+  applyDealSnapshot(deals[key]);
+  const nameEl = document.getElementById('active-deal-name');
+  if(nameEl) nameEl.textContent = deals[key].name;
+  renderDealChips();
+}
+
+function deleteDeal(key) {
+  const deals = loadSavedDeals();
+  if(!confirm(`Delete "${deals[key]?.name}"?`)) return;
+  delete deals[key];
+  persistDeals(deals);
+  if(activeDealKey === key) activeDealKey = null;
+  renderDealChips();
+}
+
+function openSaveDealModal() {
+  const modal = document.getElementById('save-deal-modal');
+  if(modal) modal.style.display = 'flex';
+  const inp = document.getElementById('deal-name-input');
+  if(inp) { inp.value = ''; setTimeout(() => inp.focus(), 50); }
+  const conf = document.getElementById('save-confirm');
+  if(conf) conf.style.display = 'none';
+}
+
+function closeSaveDealModal() {
+  const modal = document.getElementById('save-deal-modal');
+  if(modal) modal.style.display = 'none';
+}
+
+function saveDeal() {
+  const inp = document.getElementById('deal-name-input');
+  const name = inp?.value?.trim();
+  if(!name) { inp?.focus(); return; }
+  const key = 'deal_' + Date.now();
+  const snap = getDealSnapshot(name);
+  const deals = loadSavedDeals();
+  deals[key] = snap;
+  persistDeals(deals);
+  activeDealKey = key;
+  const nameEl = document.getElementById('active-deal-name');
+  if(nameEl) nameEl.textContent = name;
+  const conf = document.getElementById('save-confirm');
+  if(conf) { conf.textContent = '✓ Deal saved!'; conf.style.display = 'block'; }
+  renderDealChips();
+  setTimeout(() => closeSaveDealModal(), 900);
+}
+
+// Close save modal on backdrop
+document.addEventListener('click', e => {
+  const sm = document.getElementById('save-deal-modal');
+  if(sm && e.target === sm) closeSaveDealModal();
+});
+
+// ════════════════════════════════════════════
+// LOCK / UNLOCK DEAL TERMS
+// ════════════════════════════════════════════
+let dealLocked = true;
+
+function toggleLock() {
+  dealLocked = !dealLocked;
+  applyLock();
+}
+
+function applyLock() {
+  const card = document.getElementById('deal-terms-card');
+  const btn  = document.getElementById('lock-toggle-btn');
+  const icon = document.getElementById('lock-icon');
+  const sub  = document.getElementById('lock-sub-label');
+  const badge = document.getElementById('lock-badge');
+
+  // Use readonly + CSS pointer-events instead of disabled
+  // disabled clears values in some browsers; readonly preserves them
+  document.querySelectorAll('.lockable').forEach(el => {
+    if(el.tagName === 'INPUT' && el.type === 'text' || el.tagName === 'INPUT' && el.type === '') {
+      el.readOnly = dealLocked;
+    }
+    if(el.tagName === 'INPUT' && el.type !== 'checkbox') {
+      el.style.pointerEvents = dealLocked ? 'none' : '';
+    }
+    if(el.tagName === 'BUTTON') {
+      el.style.pointerEvents = dealLocked ? 'none' : '';
+      el.tabIndex = dealLocked ? -1 : 0;
+    }
+  });
+  // Text nfields specifically need readonly
+  document.querySelectorAll('.lockable.nf').forEach(el => {
+    el.readOnly = dealLocked;
+    el.style.pointerEvents = dealLocked ? 'none' : '';
+    el.style.userSelect = dealLocked ? 'none' : '';
+  });
+
+  if(dealLocked) {
+    card.classList.add('is-locked');
+    btn.textContent = 'Edit Deal Terms';
+    btn.style.borderColor = 'var(--mint)';
+    btn.style.color = 'var(--mint)';
+    icon.textContent = '🔒';
+    sub.textContent = 'Locked by Larabee Homes — set for this opportunity';
+    if(badge) badge.style.display = 'inline';
+  } else {
+    card.classList.remove('is-locked');
+    btn.textContent = '🔒 Lock Deal Terms';
+    btn.style.borderColor = 'var(--terra2)';
+    btn.style.color = 'var(--terra2)';
+    icon.textContent = '🔓';
+    sub.textContent = 'Editing deal terms — click Lock when done to share with investors';
+    if(badge) badge.style.display = 'none';
+  }
+}
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+calc(); calcOffers(); calcInv(); calcDep();
+
+// Default investor tax profile: NYC, MFJ, 37%, REP — fires infinite return
+const selState = document.getElementById('sel-state');
+if(selState) { selState.value = 'NYC'; }
+const selFiling = document.getElementById('sel-filing');
+if(selFiling) selFiling.value = 'mfj';
+const w2El = document.getElementById('f-w2');
+if(w2El) { w2El.value = 750000; const sl = document.getElementById('s-w2'); if(sl) sl.value = 750000; }
+
+setRepStatus('rep');
+calcTax();
+
+// Lock deal terms first (uses readonly+CSS, values preserved)
+dealLocked = true;
+applyLock();
+
+// Apply URL params last — sets values AFTER locking so they aren't wiped
+applyUrlParams();
+
+// Load saved deals into chips
+renderDealChips();
+</script>
+
+
+</body></html>

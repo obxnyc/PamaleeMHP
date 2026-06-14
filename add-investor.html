@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Larabee Homes — Add a Login</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=DM+Sans:wght@400;500;600;700&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+:root{--pine:#1f3628;--pine2:#2d4f3c;--sage:#4a7c5c;--mint:#a8c5b0;--bone:#f5f1e8;--cream:#faf8f3;--terra:#c4622d;--terra2:#e07848;--ink:#1a1a16;--mid:#5a5a50;--light:#9a9a8e;--rule:rgba(30,50,35,.12)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bone);color:var(--ink);font-family:'DM Sans',sans-serif;padding:28px 18px;min-height:100vh}
+.wrap{max-width:620px;margin:0 auto}
+.logo{font-family:'DM Serif Display',serif;font-size:24px;color:var(--pine);margin-bottom:2px}
+.logo span{color:var(--terra)}
+.eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);font-weight:600;margin-bottom:18px}
+.card{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:24px;margin-bottom:18px}
+h2{font-family:'DM Serif Display',serif;font-size:19px;color:var(--pine);margin-bottom:6px;font-weight:400}
+.sub{font-size:13px;color:var(--mid);line-height:1.5;margin-bottom:18px}
+label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mid);margin-bottom:5px;margin-top:14px}
+input[type=text],input[type=password],select{width:100%;font-family:'DM Sans',sans-serif;font-size:15px;padding:10px 13px;border:1px solid rgba(30,50,35,.3);border-radius:7px;outline:none;color:var(--ink);background:#fff}
+input:focus,select:focus{border-color:var(--pine)}
+.btn{width:100%;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:13px;border:none;border-radius:7px;background:var(--terra);color:#fff;cursor:pointer;margin-top:20px}
+.btn:hover{background:var(--terra2)}
+.out{display:none;margin-top:18px}
+.out pre{background:var(--pine);color:#e6efe8;font-family:'DM Mono',monospace;font-size:12px;line-height:1.6;padding:16px;border-radius:8px;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+.copybtn{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:9px 16px;border:none;border-radius:6px;background:var(--pine);color:#fff;cursor:pointer;margin-top:10px}
+.steps{font-size:12px;color:var(--mid);line-height:1.7;margin-top:14px;padding-left:18px}
+.steps li{margin-bottom:4px}
+.note{font-size:11px;color:var(--light);line-height:1.5;margin-top:14px;padding-top:14px;border-top:1px solid var(--rule)}
+.ok{color:#2d6b45;font-weight:600;font-size:12px;margin-top:8px;display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">Larabee <span>Homes</span></div>
+  <div class="eyebrow">Investor Portal — Add / Change a Login</div>
+
+  <div class="card">
+    <h2>Create a login</h2>
+    <div class="sub">Type a username and password for the person you're giving access to. This tool turns it into a safe, scrambled line of code (your real password is never stored in the website). Then paste that line into <strong>auth.js</strong>.</div>
+
+    <label for="user">Username</label>
+    <input id="user" type="text" placeholder="e.g. jsmith" autocapitalize="none" spellcheck="false">
+
+    <label for="pass">Password</label>
+    <input id="pass" type="text" placeholder="e.g. Pamalee-2026">
+
+    <label for="name">Display name (optional)</label>
+    <input id="name" type="text" placeholder="e.g. John Smith">
+
+    <label for="role">Access level</label>
+    <select id="role">
+      <option value="investor">Investor — sees only the read-only Investor View</option>
+      <option value="operator">Operator (you) — sees all tabs &amp; controls</option>
+    </select>
+
+    <button class="btn" onclick="generate()">Generate the line to paste</button>
+
+    <div class="out" id="out">
+      <label style="margin-top:0">Copy this and paste it into the ACCOUNTS list in auth.js:</label>
+      <pre id="snippet"></pre>
+      <button class="copybtn" onclick="copySnippet()">📋 Copy</button>
+      <span class="ok" id="ok">✓ Copied</span>
+      <ol class="steps">
+        <li>Open <strong>auth.js</strong> on GitHub (or in your editor).</li>
+        <li>Paste this block inside the <code>window.LARABEE_ACCOUNTS = [ ... ]</code> list.</li>
+        <li>Commit / save the change. The login works within a minute or two.</li>
+      </ol>
+    </div>
+
+    <div class="note">This page runs entirely in your browser — nothing is sent anywhere. You can safely keep it on the site; it only creates logins, it can't reveal existing ones.</div>
+  </div>
+</div>
+
+<script>
+async function sha256hex(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function randSalt(){
+  const a = new Uint8Array(8);
+  crypto.getRandomValues(a);
+  return [...a].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function generate(){
+  const user = document.getElementById('user').value.trim();
+  const pass = document.getElementById('pass').value;
+  const name = document.getElementById('name').value.trim() || user;
+  const role = document.getElementById('role').value;
+  if(!user || !pass){ alert('Enter both a username and a password.'); return; }
+
+  const salt = randSalt();
+  const hash = await sha256hex(salt + ':' + pass);
+
+  let block;
+  if(role === 'investor'){
+    block =
+`  {
+    user: ${JSON.stringify(user.toLowerCase())},
+    role: "investor",
+    name: ${JSON.stringify(name)},
+    salt: ${JSON.stringify(salt)},
+    hash: ${JSON.stringify(hash)},
+    deal: "f-ivp=95600&f-ivrate=5.20&f-ivterm=30&f-ivrent=1250&f-ivlot=375&f-ivconsult=45&f-ivins=42&f-ivmaint=40&f-ivcapex=40&ivd-dollars=33460&ivvac-dollars=31&deal-name=Pamalee+MHP+-+Fayetteville&locked=1"
+  },`;
+  } else {
+    block =
+`  {
+    user: ${JSON.stringify(user.toLowerCase())},
+    role: "operator",
+    name: ${JSON.stringify(name)},
+    salt: ${JSON.stringify(salt)},
+    hash: ${JSON.stringify(hash)}
+  },`;
+  }
+
+  document.getElementById('snippet').textContent = block;
+  document.getElementById('out').style.display = 'block';
+  document.getElementById('ok').style.display = 'none';
+}
+function copySnippet(){
+  const txt = document.getElementById('snippet').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    document.getElementById('ok').style.display = 'inline';
+  });
+}
+</script>
+</body></html>
